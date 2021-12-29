@@ -1,16 +1,38 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
+
 import router from './routers/routers.js';
+
+// Set __dirname in ES6
+import { fileURLToPath } from 'url';
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Create server
 const app = express();
 
+// Body Parser
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: false
+}));
+
 // Config env
 dotenv.config();
 
-// Delegate handler to router
+// Set views
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// Set assets
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Delegate handling to routers.js
 app.use('/', router);
 
+// Listening...
 const listener = app.listen(process.env.PORT || 3000, () => {
     console.log(`Your app is listening on port: ${listener.address().port}`);
 })
