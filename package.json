@@ -1,0 +1,28 @@
+{
+  "name": "notemarket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js",
+    "test": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antonio-cirillo/NoteMarket.git"
+  },
+  "author": "Antonio Cirillo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antonio-cirillo/NoteMarket/issues"
+  },
+  "homepage": "https://github.com/antonio-cirillo/NoteMarket#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
