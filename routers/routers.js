@@ -10,7 +10,23 @@ router.get('/', (req, res) => {
 })
 
 router.get('/login', isUserLogged, (req, res) => {
-    res.send("Login");
+        
+    res.render('login', {
+        errorCredential: false,
+        notVerified: false,
+        confirmRegistration: false,
+        confirmVerify: false,
+        genericError: false
+    })
+
 })
+
+router.post('/login', isUserLogged, (req, res) => {
+
+    const { email, password } = req.body;
+    console.log(email, password);
+
+})
+
 
 export default router;
