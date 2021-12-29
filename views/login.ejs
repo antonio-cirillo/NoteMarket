@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Accedi a NoteMarket</title>
+    <link rel="stylesheet" href="stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" href="images/icon.ico">
+
+    <link rel="stylesheet" href="stylesheets/login/login.css">
+    
+</head>
+
+<body style="background-color: #343a40;">
+
+    <!-- Nav Bar -->
+	<nav class="navbar navbar-light navbar-expand-lg sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link" href="./">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="#" style="background-color: rgba(0,0,0,0);">Accedi</a>
+                	<button class="btn btn-light action-button" data-bs-hover-animate="tada" type="button" onclick="window.location.href='./registrati'">Registrati</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <!-- Login Form -->
+    <div class="login-clean" style="background-color: rgba(0,0,0,0.1);background-image: url(&quot;images/login/background.jpg&quot;);padding-top: 80px;padding-bottom: 125px;">
+        <form class="shadow-lg" method="post" id="login" action="login" style="background-color: rgba(255,255,255,0.6);max-width: 450px;min-width: 330px;">
+            <div class="illustration" id="headingForm"><img class="img-fluid" src="images/login/logo.png" style="margin-top: -100px;margin-bottom: -35px;">
+                <% if (errorCredential) { %><div class="alert alert-danger" id="errorCredential" role="alert" style="font-size: 16px;margin-bottom: 0px;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span class="text-center" style="font-size: 13px;"><strong>Email e/o password errati</strong>.</span></div> <% } %>
+                <% if (notVerified) { %><div class="alert alert-danger" id="notVerified" role="alert" style="font-size: 16px;margin-bottom: 0px;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span class="text-center" style="font-size: 13px;"><strong>L'account non è stato ancora confermato! Premi sul link che hai ricevuto via email</strong>.</span></div> <% } %>
+                <% if (confirmRegistration) { %><div class="alert alert-success" id="confirmRegistration" role="alert" style="font-size: 16px;margin-bottom: 0px;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span class="text-center" style="font-size: 13px;"><strong>Registrazione avvenuta con successo! Clicca sul link ricevuto via email per confermare l'account</strong>.</span></div> <% } %>
+            	<% if (confirmVerify) { %><div class="alert alert-success" id="confirmVerify" role="alert" style="font-size: 16px;margin-bottom: 0px;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span class="text-center" style="font-size: 13px;"><strong>Account verificato con successo</strong>.</span></div> <% } %>
+                <% if (genericError) { %><div class="alert alert-danger" id="genericError" role="alert" style="font-size: 16px;margin-bottom: 0px;"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span class="text-center" style="font-size: 13px;"><strong>Ops! Qualcosa è andato storto</strong>.</span></div> <% } %>
+            </div>
+            <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
+            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+            <div class="form-group"><button class="btn btn-primary btn-block" data-bs-hover-animate="tada" type="submit" style="background-color: #16a851;">Accedi</button></div><% if (errorCredential) { %><a class="forgot" href="#" style="background-color: rgba(0,0,0,0);">Hai dimenticato la password?</a><% } %></form>
+    </div>
+ 
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-snapchat"></i></a>
+                <a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2021</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+
+    <script src="scripts/regex.js" charset="utf-8"></script>
+    <script src="scripts/login/login.js" charset="utf-8"></script>
+    <script>$(document).ready(() => { submitLogin(); });</script>
+
+</body>
+
+</html>
