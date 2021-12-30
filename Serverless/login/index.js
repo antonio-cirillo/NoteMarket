@@ -8,13 +8,7 @@ module.exports = async function (context, req) {
 
     // Get email and password
     const email = (req.query.email || (req.body && req.body.email));
-    const password = (req.query.password) || (req.body && req.body.password)
-
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Declare response
-    let response;
+    const password = (req.query.password || (req.body && req.body.password));
 
     try {
 
@@ -27,26 +21,32 @@ module.exports = async function (context, req) {
         });
 
         // Check if user exist
-        if (!user || user.password != hashedPassword) { 
-            response = { error: "credentialError" };
-        } 
-        // Check user status    
-        else if (user.status === "notVerified") {
-            response = { error: "notVerifiedError"};
-        } 
-        // Successful login
-        else {
-            response = user;
+        if (!user) { 
+            context.res = { body: { error: "credentialError" } };
+            return;
+        } else {
+            // Check password
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                context.res = { body: { error: "credentialError" } };
+                return;
+            }
+            // Check user status    
+            if (user.status === "notVerified") {
+                context.res = { body: { error: "notVerifiedError" } };
+                return;
+            } 
+            // Successful login
+            else {
+                context.res = { body: user };
+                return;
+            }
         }
 
     } catch (error) {
         // Return generic error
-        response = { error: "genericError" };
+        context.res = { body: { error: "genericError" } };
+        return;
     }
-
-    // Return results
-    context.res = {
-        body: response
-    };
 
 }
