@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -13,6 +14,13 @@ const __dirname = dirname(__filename);
 
 // Create server
 const app = express();
+
+// Set session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Body Parser
 app.use(express.json());
