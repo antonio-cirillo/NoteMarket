@@ -5,8 +5,10 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true},
     name: { type: String, required: true},
     surname: { type: String, required: true},
-    dob: { type: String, required: true },
-    status: { type: String, required: true}
+    dob: { type: Date, required: true },
+    status: { type: String, required: true},
+    activeToken: String,
+    activeExpires: Date
 }, {
     versionKey: false
 });
