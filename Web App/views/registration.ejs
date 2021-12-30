@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Registrati a NoteMarket</title>
+    <link rel="stylesheet" href="stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" href="images/icon.ico">
+
+    <link rel="stylesheet" href="stylesheets/registration/registration.css">
+
+</head>
+
+<body style="background-color: #343a40;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link" href="./">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="./login" style="background-color: rgba(0,0,0,0);">Accedi</a>
+                	<button class="btn btn-light action-button" disabled data-bs-hover-animate="tada" type="button" onclick="window.location.href='./registrati'">Registrati</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <!-- Registration form -->
+    <div class="register-photo" style="background-image: url(&quot;images/login/background.jpg&quot;);background-color: rgb(236,171,1);background-repeat: no-repeat;">
+        <div class="form-container" style="margin-top: -45px;">
+            <form class="shadow-lg" method="post" id="registration" action="./registrati" style="opacity: 1;filter: blur(0px);background-color: rgba(255,255,255,0.8);">
+                <div id="headingForm">
+                	<div class="d-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center"
+                    	style="margin-top: -75px;margin-bottom: -25px;"><img class="img-fluid d-md-flex d-xl-flex" src="images/login/logo.png" style="height: 248px;"></div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-lg-6 col-xl-6">
+                        <div class="form-group"><input class="form-control" type="text" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" name="name" placeholder="Nome" title="Inserisci il tuo nome."></div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-xl-6">
+                        <div class="form-group"><input class="form-control" type="text" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" name="surname" placeholder="Cognome" title="Inserisci il tuo cognome."></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-lg-6 col-xl-6">
+                        <div class="form-group"><input class="form-control" type="email" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" name="email" placeholder="Email" title="Inserisci la tua mail."></div>
+                    </div>
+                    <div class="col-12 col-lg-6 col-xl-6">
+                        <div class="form-group"><input class="form-control" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" type="date" name="dob" title="Inserisci la tua data di nascita."></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-12 col-lg-6 col-xl-6">
+                        <div class="form-group"><input class="form-control" type="password" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" name="password" placeholder="Password" title="La password deve contenere minimo 8 caratteri, massimo 16. Deve includere almeno una lettera minuscola, una maiuscola e un numero."></div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group"><input class="form-control" type="password" data-toggle="tooltip" data-bs-tooltip="" data-placement="bottom" name="confirmPassword" placeholder="Ripeti la password" title="Inserisci nuovamente la password."></div>
+                    </div>
+                </div>
+        	    <div class="form-group d-sm-flex justify-content-sm-center align-items-sm-center"><input type="checkbox" name="policy"><a href="./policy" style="color: rgb(120,131,142);margin-left: 10px;background-color: rgba(0,0,0,0);">Accetto le condizioni d'uso.</a></div>
+                <div class="form-group"><button class="btn btn-primary btn-block" data-bs-hover-animate="tada" type="submit" style="background-color: #16a851;margin-top: 0px;">Registrati</button></div>
+                <a class="already" href="./login" style="background-color: rgba(0,0,0,0);">Hai già un account? Clicca qui per accedere.</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bs-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="./" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="./contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="./policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2021</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+
+    <script src="scripts/regex.js" charset="utf-8"></script>
+    <script src="scripts/registration/registration.js" charset="utf-8"></script>
+    <script>$(document).ready(() => { submitRegistration(); });</script>
+
+</body>
+
+</html>
