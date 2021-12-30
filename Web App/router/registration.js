@@ -72,9 +72,27 @@ export function postRegistration(req, res) {
 
     // Execute registration serverless
     axios.post('http://localhost:7071/api/registration', {
-
+        name: name,
+        surname: surname,
+        email: email,
+        password: password,
+        dob: date
     }).then((response) => {
-
+        // Check if there is an error
+        if (response.data.error) {
+            res.render('registration', {
+                error: true,
+                messageError: (response.data.error == 'emailAlreadyExistsError') ? 
+                    'Email già associata ad un account' : 'Ops! Qualcosa è andato storto'
+            });            
+        }
+        // Registration successful
+        else {
+            const activeToken = response.data.activeToken;
+            console.log(activeToken);
+            res.redirect('./login?confirm=registration');
+            return;
+        }
     }, (error) => {
         res.render('registration', {
             error: true,
@@ -82,9 +100,5 @@ export function postRegistration(req, res) {
         });
         return;
     })
-
-    crypto.randomBytes(20, (err, buf) => {
-        console.log(buf.toString('hex'));
-    });
 
 }
