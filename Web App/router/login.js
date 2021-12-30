@@ -1,6 +1,4 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-dotenv.config();
 
 // Declare email and password regex
 const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-Z0-9]{1,46}\.[a-zA-Z]{2,4}$/;
@@ -38,7 +36,10 @@ export function postLogin(req, res) {
             } 
             // Login successful
             else {
-                console.log(response.data);
+                req.session.user = response.data;
+                req.session.save();
+                // Redirect to homepage
+                res.redirect('/');
             }
         }, (error) => {
             res.render('login', {
