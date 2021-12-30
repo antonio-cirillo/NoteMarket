@@ -44,6 +44,7 @@
                 <div id="headingForm">
                 	<div class="d-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center"
                     	style="margin-top: -75px;margin-bottom: -25px;"><img class="img-fluid d-md-flex d-xl-flex" src="images/login/logo.png" style="height: 248px;"></div>
+                        <% if(error) { %><div class="alert alert-danger text-center" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button><span><strong><%= messageError %></strong>.</span></div> <% } %>
                 </div>
                 <div class="form-row">
                     <div class="col-12 col-lg-6 col-xl-6">
