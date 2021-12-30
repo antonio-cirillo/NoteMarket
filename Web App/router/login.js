@@ -6,8 +6,17 @@ const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
 
 export function getLogin(req, res) {
 
+    // Check param confirm
+    let confirm = '';
+    if (req.query.confirm != null) {
+        if (req.query.confirm == 'registration') {
+            confirm = 'registrationConfirm';
+        }
+    }
+
     res.render('login', {
-        error: false
+        error: '',
+        confirm: confirm
     });
 
 }
@@ -19,7 +28,8 @@ export function postLogin(req, res) {
     // If email or password doesn't match with pattern 
     if (!EMAIL_REGEX.test(email) || !PASSWORD_REGEX.test(password)) {
         res.render('login', {
-            error: 'genericError'
+            error: 'genericError',
+            confirm: ''
         });
     } 
     // Execute login serverless
@@ -31,7 +41,8 @@ export function postLogin(req, res) {
             // Check if there is an error
             if (response.data.error) {
                 res.render('login', {
-                    error: response.data.error
+                    error: response.data.error,
+                    confirm: ''
                 });
             } 
             // Login successful
@@ -43,7 +54,8 @@ export function postLogin(req, res) {
             }
         }, (error) => {
             res.render('login', {
-                error: 'genericError'
+                error: 'genericError',
+                confirm: ''
             });
         });
     }
