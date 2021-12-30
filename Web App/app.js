@@ -2,11 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import router from './routers/routers.js';
+// Import routers
+import router from './router/router.js';
 
 // Set __dirname in ES6
 import { fileURLToPath } from 'url';
-import { dirname } from 'path'
+import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -29,7 +30,7 @@ app.set('view engine', 'ejs');
 // Set assets
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Delegate handling to routers.js
+// Delegate handling to router.js
 app.use('/', router);
 
 // Listening...
