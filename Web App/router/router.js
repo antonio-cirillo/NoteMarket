@@ -1,6 +1,7 @@
 import express from 'express';
 
 // Import routers
+import { getIndex } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
@@ -14,12 +15,7 @@ import isNotUserLogged from '../interceptors/isNotUserLogged.js';
 const router = express.Router();
 
 //===================== HOME PAGE =====================//
-router.get('/', (req, res) => {
-    if (req.session.user) {
-        console.log(req.session.user);
-    }
-    res.send("Home page");
-})
+router.get('/', getIndex);
 
 //===================== LOGIN PAGE =====================//
 router.get('/login', isUserLogged, getLogin);
