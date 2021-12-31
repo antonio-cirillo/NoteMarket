@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>NoteMarket</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="icon" href="images/icon.ico">
+
+</head>
+
+<body style="background-color: #343a40;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="./login" style="background-color: rgba(0,0,0,0);">Accedi</a>
+                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='./registrati'">Registrati</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <header class="text-center text-white masthead" style="background: rgb(92,81,215);">
+        <div class="overlay" style="background: url(&quot;images/index/sfondoIniziale.png&quot;) center / cover no-repeat, rgba(255,255,255,0);opacity: 1;"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-9 mx-auto position-relative">
+                    <h1 class="mb-5" style="font-family: Heebo, sans-serif;margin: 0px;"><strong>Compra e vendi appunti online</strong><br></h1>
+                    <h1 class="mb-5" style="font-family: Heebo, sans-serif;margin: 0px;font-size: 24px;">Studiare non è mai stato così semplice.<br>Crea un account per poter caricare i tuoi riassunti, i tuoi schemi o le tue presentazioni, per poter acquistare quelle degli altri!<br></h1>
+                </div>
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto position-relative"><button class="btn btn-primary btn-lg" data-bss-hover-animate="tada" type="submit" style="background: #f9b401;" onclick="window.location.href='./registrati'">Registrati</button></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="showcase" style="background: #5c51d7;">
+        <div class="container-fluid p-0">
+            <div class="row g-0" style="background: #5c51d7;padding: 10px;border-style: none;">
+                <div class="col-lg-6 text-white order-lg-2 showcase-img" style="background: url(&quot;images/index/scocciato.png&quot;) center / contain no-repeat;"><span></span></div>
+                <div class="col-lg-6 my-auto order-lg-1 showcase-text">
+                    <h2 style="font-family: Heebo, sans-serif;color: rgb(255,255,255);"><strong>Perchè NoteMarket?</strong><br></h2>
+                    <p class="lead mb-0" style="font-family: Heebo, sans-serif;color: rgb(255,255,255);">Ti è mai capitato di dover studiare per un'esame da slides scadenti, seguire lezioni di professori che non riescono a tener vivo il tuo interesse, per poi ritrovarti con dei pessimi appunti e una voglia pari a zero? No, non ti abbiamo spiato. Abbiamo creato NoteMarket proprio per questo, per aiutare coloro che vogliono imparare ma che non sono messi in condizione per farlo.<br></p>
+                </div>
+            </div>
+            <div class="row g-0" style="padding: 10px;background: url(&quot;images/index/sfondoFinale.png&quot;) center / cover no-repeat;">
+                <div class="col-lg-6 text-white showcase-img" style="background: url(&quot;images/index/equilibrio.png&quot;) center / contain no-repeat;"><span></span></div>
+                <div class="col-lg-6 my-auto order-lg-1 showcase-text">
+                    <h2 style="font-family: Heebo, sans-serif;color: rgb(255,255,255);"><strong>...Quindi è un sito per Universitari?</strong><br></h2>
+                    <p class="lead mb-0" style="font-family: Heebo, sans-serif;color: rgb(255,255,255);">Non solo! Le risorse che si trovano sul sito sono molto utili anche a coloro che intendono seguire un percorso da autodidatta, ma anche a chi si sveglia la mattina con la voglia di imparare qualcosa!<br>La conoscenza è di tutti, universitari e non.<br></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="text-center features-icons" style="background: rgb(248,180,0);">
+        <div class="container">
+            <div class="row" style="color: rgb(255,255,255);font-family: Heebo, sans-serif;">
+                <div class="col-lg-4">
+                    <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                        <div class="d-flex features-icons-icon"><i class="icon-like m-auto" data-bss-hover-animate="pulse" style="color: rgb(92,81,215);"></i></div>
+                        <h3>Qualità garantita</h3>
+                        <p class="lead mb-0">Prima di essere messo in vendita. tutto il materia viene sottoposto a revisione.<br></p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                        <div class="d-flex features-icons-icon"><i class="icon-credit-card m-auto" data-bss-hover-animate="pulse" style="color: rgb(92,81,215);"></i></div>
+                        <h3>Stripe</h3>
+                        <p class="lead mb-0">Grazie a Stripe tutti i pagamenti effettuati sul sito sono garantiti e sicuri.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-3">
+                        <div class="d-flex features-icons-icon"><i class="icon-cursor m-auto" data-bss-hover-animate="pulse" style="color: rgb(92,81,215);"></i></div>
+                        <h3>Supporto per gli utenti</h3>
+                        <p class="lead mb-0">Ci sono delle operazioni che non ti sono ben chiare? Contatta il bot di assistenza NoteMarket su telegram.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="./contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="./policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2021</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+
+</body>
+
+</html>
