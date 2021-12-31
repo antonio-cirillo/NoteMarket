@@ -33,32 +33,28 @@ module.exports = async function (context, req) {
             return;
         }
     
+        // Generate token for registration        
+        const activeToken = crypto.randomBytes(20).toString('hex');
+        const activeExpires = Date.now() + 24 * 3600 * 1000;
+        
         // Registration successful
-        crypto.randomBytes(20, (err, buf) => {
-            
-            // Generate token for registration
-            const activeToken = buf.toString('hex');
-            const activeExpires = Date.now() + 24 * 3600 * 1000;
+        const hashedPassword = bcrypt.hashSync(password, 12);
 
-            const hashedPassword = bcrypt.hashSync(password, 12);
+        // Create user
+        new Users({
+            email: email,
+            password: hashedPassword,
+            name: name,
+            surname: surname,
+            dob: dob,
+            status: "notVerified",
+            activeToken: activeToken,
+            activeExpires: activeExpires            
+        }).save();
 
-            // Create user
-            const user = new Users({
-                email: email,
-                password: hashedPassword,
-                name: name,
-                surname: surname,
-                dob: dob,
-                status: "notVerified",
-                activeToken: activeToken,
-                activeExpires: activeExpires            
-            }).save();
-
-            // Return token
-            context.res = { body: { activeToken: activeToken } };
-            return;
-
-        });
+        // Return token
+        context.res = { body: { activeToken: activeToken } };
+        return;
 
     } catch (error) {
         // Return generic error
