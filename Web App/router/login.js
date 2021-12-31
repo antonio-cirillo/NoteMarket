@@ -11,11 +11,21 @@ export function getLogin(req, res) {
     if (req.query.confirm != null) {
         if (req.query.confirm == 'registration') {
             confirm = 'registrationConfirm';
+        } else if (req.query.confirm == 'verify') {
+            confirm = 'verifyConfirm';
+        }
+    }
+
+    // Check param error
+    let error = '';
+    if (req.query.error != null) {
+        if (req.query.error == 'generic') {
+            error = 'genericError';
         }
     }
 
     res.render('login', {
-        error: '',
+        error: error,
         confirm: confirm
     });
 
@@ -34,7 +44,7 @@ export function postLogin(req, res) {
     } 
     // Execute login serverless
     else {
-        axios.post('http://localhost:7071/api/login', {
+        axios.post(process.env.URL_FUNCTION_LOGIN, {
             email: email,
             password: password
         }).then((response) => {
