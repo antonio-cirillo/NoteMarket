@@ -25,7 +25,7 @@ module.exports = {
             title: 'Cloud Computing',
             description: 'Appunti del corso di cloud computing, anno accademico 2020/2021.',
             price: 1.99,
-            image: 'https://smartworkingabruzzo.it/wp-content/uploads/2020/05/Cloud.png',
+            image: 'https://www.alet.com/wp-content/uploads/2021/08/svantaggi-cloud-computing.jpg',
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: '',
