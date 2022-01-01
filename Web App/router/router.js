@@ -6,7 +6,7 @@ import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
 import { getActiveAccount } from './activeAccount.js';
-import { getCatalog } from './catalog.js';
+import { getCatalog, getItem } from './catalog.js';
 
 // Import interceptors
 import isUserLogged from '../interceptors/isUserLogged.js';
@@ -36,6 +36,9 @@ router.get('/attiva-account', isUserLogged, getActiveAccount);
 
 //===================== CATALOG PAGE =====================//
 router.get('/catalogo', getCatalog);
+
+//======================= ITEM PAGE =======================//
+router.get('/catalogo/:_id', getItem);
 
 // Export router
 export default router;
