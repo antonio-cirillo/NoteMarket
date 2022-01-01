@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export function getCatalog(req, res) {
     
-    let object = {}
+    // Declare object for ejs
+    let object = {};
 
     // If user is logged 
     if (req.session.user) {
@@ -59,5 +60,25 @@ export function getCatalog(req, res) {
             res.render('catalog', object);
         });
     }
+
+}
+
+export function getItem(req, res) {
+
+    // Declare object for ejs
+    let object = {};
+    // Get id of item
+    const id = req.params._id;
+    
+    // If user is logged 
+    if (req.session.user) {
+        object.logged = true;
+    } 
+    // If user is not logged
+    else {
+        object.logged = false;
+    }
+
+    res.render('item', object);
 
 }
