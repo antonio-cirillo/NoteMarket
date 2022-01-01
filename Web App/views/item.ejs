@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Catalogo</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="../stylesheets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="../stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="../stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="icon" href="../images/icon.ico">
+
+</head>
+
+<body style="background-color: white;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg shadow-sm sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="../images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link" href="../">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="../catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<% if (logged) { %><a class="login" href="../logout" style="background-color: rgba(0,0,0,0);">Esci</a><% } %>
+                    <% if (!logged) { %><a class="login" href="../login" style="background-color: rgba(0,0,0,0);">Accedi</a><% } %>
+                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='./registrati'">Registrati</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <div id="wrapper" style="padding: 10px;">
+        <div class="d-flex flex-column" id="content-wrapper" style="font-family: Heebo, sans-serif;background: rgb(255,255,255);">
+            <div id="content">
+                <div class="container-fluid">
+                    <h3 class="mb-4" style="font-weight: bold;color: #5c51d7;">Titolo appunto</h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-body text-center shadow"><img class="mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
+                                    <div class="mb-3"><button class="btn btn-primary btn-sm" data-bss-hover-animate="tada" type="button" style="background: rgb(92,81,215);">Aggiungi al carrello</button></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" style="width: 100%;height: 100%;">
+                            <div class="card shadow mb-3" style="width: 100%;height: 100%;">
+                                <div class="card-header py-3" style="width: 100%;height: 100%;">
+                                    <div class="row" style="margin-bottom: -25px;width: 100%;height: 100%;">
+                                        <div class="col mb-4" style="height: 100%;width: 100%;">
+                                            <div class="card textwhite text-white shadow" style="background: url(&quot;../images/catalog/sfondo.svg&quot;) center / cover no-repeat, rgba(255,255,255,0);width: 100%;height: 100%;">
+                                                <div class="card-body" style="width: 100%;height: 100%;">
+                                                    <p class="m-0" style="font-weight: bold;width: 100%;height: 100%;">Identificativo</p>
+                                                    <p class="text-white small m-0">Prova di Id</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col mb-4" style="height: 100%;width: 100%;">
+                                            <div class="card textwhite text-white shadow" style="background: url(&quot;../images/catalog/sfondo.svg&quot;) center / cover no-repeat, rgba(255,255,255,0);width: 100%;height: 100%;">
+                                                <div class="card-body" style="width: 100%;height: 100%;">
+                                                    <p class="m-0" style="font-weight: bold;width: 100%;">Venditore</p>
+                                                    <p class="text-white small m-0">email@dominio.it</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col mb-4" style="height: 100%;width: 100%;">
+                                            <div class="card textwhite text-white shadow" style="background: url(&quot;../images/catalog/sfondo.svg&quot;) center / cover no-repeat, rgba(255,255,255,0);width: 100%;height: 100%;">
+                                                <div class="card-body" style="width: 100%;height: 100%;">
+                                                    <p class="m-0" style="font-weight: bold;width: 100%;">Prezzo</p>
+                                                    <p class="text-white small m-0">1.99 €</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body" style="height: 100%;width: 100%;">
+                                    <p style="text-align: center;"><em>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</em><br></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow mb-5">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold" style="color: rgb(92,81,215);">Sezione commenti</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" style="margin-bottom: 15px;">
+                                <div class="col">
+                                    <div class="card shadow">
+                                        <div class="card-header py-3">
+                                            <p class="text-primary m-0 fw-bold" style="color: rgb(92,81,215);">Inserisci un commento</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="mb-3"><input class="form-control" type="text" id="address" placeholder="Scrivi un commento..." name="comment"></div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" data-bss-hover-animate="tada" type="submit" style="background: rgb(92,81,215);">Pubblica</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="text-primary fw-bold m-0" style="color: rgb(92,81,215);">Sentiment Analysis dei commenti</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="small fw-bold">Negativi<span class="float-end">20%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
+                                            </div>
+                                            <h4 class="small fw-bold">Neutri<span class="float-end">40%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
+                                            </div>
+                                            <h4 class="small fw-bold">Positività<span class="float-end">100%</span></h4>
+                                            <div class="progress mb-4">
+                                                <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="text-primary fw-bold m-0" style="color: rgb(92,81,215);">Commenti</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive table mt-2" id="dataTable-1" role="grid" aria-describedby="dataTable_info">
+                                                <table class="table my-0" id="dataTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="d-none d-print-table-cell d-md-table-cell d-lg-table-cell d-xl-table-cell d-xxl-table-cell"><strong>Email</strong></th>
+                                                            <th><strong>Commento</strong></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="d-none d-print-table-cell d-md-table-cell d-lg-table-cell d-xl-table-cell d-xxl-table-cell">email.@dominio.it</td>
+                                                            <td><em>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</em><br></td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td class="d-none d-print-table-cell d-md-table-cell d-lg-table-cell d-xl-table-cell d-xxl-table-cell"><strong>Email</strong></td>
+                                                            <td><strong>Commento</strong></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="../" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="../contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="../policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2022</p>
+        </footer>
+    </div>
+
+    <script src="../scripts/bootstrap/jquery.min.js"></script>
+    <script src="../scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+
+</body>
+
+</html>
