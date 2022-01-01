@@ -8,8 +8,8 @@ module.exports = {
             image: 'https://www.federica.eu/wp-content/uploads/2020/07/Banner-BLOG-informatica-Facebook-1080x628.png',
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
-            emailModerator: '',
-            status: 'verified'
+            emailModerator: 'dev.cirillo@gmail.com',
+            status: 'notVerified'
         },
         {
             title: 'Sicurezza dei Dati',
