@@ -25,7 +25,6 @@ module.exports = async function (context, req) {
         context.res = { body: { flag: true } };
 
     } catch (error) {
-        console.log(error);
         // Return error
         context.res = { body: { flag: false } };
     }
