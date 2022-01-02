@@ -38,3 +38,11 @@ function addToCart(isLogged, _id) {
     }
 
 }
+
+function addComment(isOwned) {
+
+    if (!isOwned) {
+        toastr.error("Per effettuare un commento devi prima acquistare il prodotto!");
+    }
+
+}
