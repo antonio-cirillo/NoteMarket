@@ -9,7 +9,7 @@ module.exports = async function (context, req) {
     try {
 
         // Connect to database
-        mongoose.connect(process.env['MONGO_URI']);
+        await mongoose.connect(process.env['MONGO_URI']);
 
         // Create user
         if (await Users.countDocuments() == 0) {

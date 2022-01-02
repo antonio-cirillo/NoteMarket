@@ -11,7 +11,7 @@ module.exports = async function (context, req) {
     try {
 
         // Connect to database
-        mongoose.connect(process.env['MONGO_URI']);
+        await mongoose.connect(process.env['MONGO_URI']);
 
         // Active account by token
         const user = await Users.findOne({ activeToken: token }).exec();
