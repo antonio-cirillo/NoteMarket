@@ -98,9 +98,16 @@ export async function getItem(req, res) {
         return;
     }  
 
+    // Init isOwned parameter
+    object.isOwned = false;
+
     // If user is logged 
     if (req.session.user) {
         object.logged = true;
+        if (req.session.user.itemsBuyed.includes(_id) ||
+                req.session.user.itemSelling.includes(_id)) {
+                    object.isOwned = true;
+                }
         if (req.session.cart.includes(_id)) {
             object.insideCart = true;
         } else {
