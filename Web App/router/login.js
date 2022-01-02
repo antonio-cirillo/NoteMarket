@@ -58,6 +58,7 @@ export function postLogin(req, res) {
             // Login successful
             else {
                 req.session.user = response.data;
+                req.session.cart = [];
                 req.session.save();
                 // Redirect to homepage
                 res.redirect('/');
