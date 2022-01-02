@@ -49,7 +49,9 @@ module.exports = async function (context, req) {
             dob: dob,
             status: "notVerified",
             activeToken: activeToken,
-            activeExpires: activeExpires            
+            activeExpires: activeExpires,
+            itemsBuyed: [],
+            itemsSelling: []            
         }).save();
 
         // Return token
