@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%">
 <head>
 
     <meta charset="utf-8">
@@ -15,11 +15,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
     <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="icon" href="images/icon.ico">
 
 </head>
 
-<body style="background-color: #343a40;">
+<body style="background-color: #343a40;min-height: 100%;">
+
+    <style>
+
+        .hovernow:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+        }
+        
+    </style>
 
     <!-- Nav bar -->
 	<nav class="navbar navbar-light shadow-sm navbar-expand-lg sticky-top navigation-clean-button">
@@ -33,13 +42,13 @@
                 <span class="navbar-text actions"> 
                 	<% if (logged) { %><a class="login" href="./logout" style="background-color: rgba(0,0,0,0);">Esci</a><% } %>
                     <% if (!logged) { %><a class="login" href="./login" style="background-color: rgba(0,0,0,0);">Accedi</a><% } %>
-                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='./registrati'">Registrati</button>
+                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='<%= (logged)? `./carrello` : `./registrati` %>'"><%= (logged) ? "Carrello" : "Registrati" %></button>
                 </span>
         	</div>
         </div>
     </nav>
 
-    <div id="wrapper" style="background-color: white;">
+    <div id="wrapper" style="background-color: white;min-height: 100%;">
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <div class="container-fluid" style="padding: 15px;">
@@ -47,7 +56,7 @@
                         <div class="card-header py-3">
                             <p class="m-0 fw-bold" style="font-family: Heebo, sans-serif;font-size: 32px;color: #5c51d7;">Catalogo</p>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="min-height: 50vh;">
                             <div class="row" style="padding: 10px;">
                                 <div class="col d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center justify-content-sm-center justify-content-md-center justify-content-lg-center justify-content-xl-center">
                                     <div class="text-center shadow-sm d-flex justify-content-md-center" style="border-radius: 30px;padding: 6px;margin: 0px;width: 68%;height: 45px;background: rgb(255,255,255);border-style: solid;border-color: rgb(248,180,0);"><input class="float-start" id="title" type="text" placeholder="Cerca..." style="margin-bottom: 0;margin-top: 0;/*height: 100%;*/padding: 8px;width: 89%;color: rgb(0,0,0);background: #ffffff;border-style: none;border: none;background-color: transparent;resize: none;outline: none;">
@@ -55,10 +64,15 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Put here list -->
+                            <% if (catalog.length == 0) { %>
+                            <div class="row" style="height: auto;margin: 0px;">
+                                <div class="col" style="text-align: center;"><strong style="font-family: Heebo, sans-serif;">Non sono presenti elementi nel database!</strong></div>
+                            </div>
+                            <% } else { %>
                             <div class="border rounded shadow" id="list" style="width: 100%;height: auto;background-color: #ffffff;margin-bottom: 5px;">
-                                <!-- Put here list -->
                                 <% for (item of catalog) { %>
-                                <div class="row" style="height: auto;margin: 0px;">
+                                <div class="row hovernow" onclick="window.location.href='./catalogo/<%= item._id %>'" style="cursor:pointer;height: auto;margin: 0px;">
                                     <div class="col-3 col-xl-2 d-none d-print-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;padding: 0px;">
                                         <div class="d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center justify-content-xxl-center align-items-xxl-center" style="height: auto;width: 100%;padding: 10px;"><img src="<%= item.image %>" style="max-height: 30%;height: auto;max-width: 75%;min-width: 50%;width: 150px;"></div>
                                     </div>
@@ -71,6 +85,7 @@
                                 </div>
                                 <% } %>
                             </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>
@@ -97,8 +112,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="scripts/catalog/catalog.js"></script>
+    <% if (error != '') { %><script>$(document).ready(() => { toastr.error("<%= error %>"); });</script><% } %>
 
 </body>
 

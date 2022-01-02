@@ -6,7 +6,7 @@ import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
 import { getActiveAccount } from './activeAccount.js';
-import { getCatalog, getItem } from './catalog.js';
+import { getAddToCart, getCatalog, getItem } from './catalog.js';
 
 // Import interceptors
 import isUserLogged from '../interceptors/isUserLogged.js';
@@ -36,6 +36,9 @@ router.get('/attiva-account', isUserLogged, getActiveAccount);
 
 //===================== CATALOG PAGE =====================//
 router.get('/catalogo', getCatalog);
+
+//=================== ADD TO CART PAGE ===================//
+router.post('/catalogo/aggiungi-al-carrello', isNotUserLogged, getAddToCart);
 
 //======================= ITEM PAGE =======================//
 router.get('/catalogo/:_id', getItem);
