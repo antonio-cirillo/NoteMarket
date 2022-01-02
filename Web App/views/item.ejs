@@ -29,12 +29,12 @@
                 id="navcol-1" style="margin-top: 0px;">
                 <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
                     <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link" href="../">Home</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="../catalogo">Catalogo</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="../catalogo">Catalogo</a></li>
                 </ul>
                 <span class="navbar-text actions"> 
                 	<% if (logged) { %><a class="login" href="../logout" style="background-color: rgba(0,0,0,0);">Esci</a><% } %>
                     <% if (!logged) { %><a class="login" href="../login" style="background-color: rgba(0,0,0,0);">Accedi</a><% } %>
-                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='<%= (logged)? `./carrello` : `./registrati` %>'"><%= (logged) ? "Carrello" : "Registrati" %></button>
+                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='<%= (logged)? `../carrello` : `../registrati` %>'"><%= (logged) ? "Carrello" : "Registrati" %></button>
                 </span>
         	</div>
         </div>
