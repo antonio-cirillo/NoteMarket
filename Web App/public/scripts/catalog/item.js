@@ -23,7 +23,7 @@ function addToCart(isLogged, _id) {
         } else {
             $.ajax({
                 type: "POST",
-                url: "./aggiungi-al-carrello",
+                url: "./rimuovi-dal-carrello",
                 data: { _id: _id },
                 success: function(data) {
                     $("#cart").text("Aggiungi al carrello");
