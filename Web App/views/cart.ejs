@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Carrello</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="./stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="./stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="./stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="./images/icon.ico">
+
+</head>
+
+<body style="background-color: white;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg shadow-sm sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="./images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link" href="./">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="./logout" style="background-color: rgba(0,0,0,0);">Esci</a>
+                	<button class="btn btn-light action-button" disabled data-bss-hover-animate="tada" type="button" onclick="window.location.href='./carrello'">Carrello</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <div class="row" style="height: auto;margin-right: 0px;margin-left: 0px;">
+        <div class="col-1 col-sm-1 col-md-1 col-lg-2 col-xl-2 d-lg-flex justify-content-lg-start">
+            <div></div>
+        </div>
+        <div class="col-10 col-sm-10 col-md-10 col-lg-8 col-xl-8" style="padding: 15px;height: auto;">
+            <div class="text-center border rounded shadow" style="height: auto;background-color: #f8b400;">
+                <div class="shadow-lg d-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" style="width: 100%;height: 110px;"><i class="fa fa-shopping-cart" style="width: auto;color: rgb(255,255,255);font-size: 56px;height: auto;"></i></div>
+                <div style="min-height: 40vh;width: 100%;height: 57%;background-color: #f3f3f3;padding: 15px;">
+                    <div class="container scstyle-6 sc-overflow" id="list" style="background-color: #f6f6f6;width: 100%;height: 100%;padding: 14px;">
+                        <% if (items.length == 0) { %>
+                        <div class="row" style="height: auto;margin: 0px;">
+                            <div class="col" style="text-align: center;"><strong style="font-family: Heebo, sans-serif;">Non sono presenti elementi nel carrello!</strong></div>
+                        </div>
+                        <% } else { %>
+                        <% for (item of items) { %>
+                        <div class="border rounded shadow" id="<%= item._id %>" style="width: 100%;height: auto;background-color: #ffffff;margin-bottom: 5px;">
+                            <div class="row" style="height: auto;margin: 0px;">
+                                <div class="col-1 col-xl-1 offset-0 d-md-flex d-lg-flex justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;">
+                                    <div class="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" onclick="removeFromCart(<%= items.length %>, '<%= item._id %>', <%= item.price %>)" style="cursor: pointer;height: 100%;width: 100%;margin-left: 0px;"><i class="fa fa-remove" data-toggle="tooltip" data-bss-tooltip="" style="font-size: 34px;color: rgb(201,38,27);" title="Rimuovi prodotto"></i></div>
+                                </div>
+                                <div class="col-3 col-xl-2 d-sm-flex d-md-flex d-lg-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;padding: 0px;">
+                                    <div style="height: auto;width: 100%;padding: 10px;"><img src="<%= item.image %>" style="max-height: 30%;height: auto;max-width: 75%;min-width: 50%;"></div>
+                                </div>
+                                <div class="col" style="height: auto;">
+                                    <div></div>
+                                    <h1 class="text-left float-left" style="width: 50%;font-size: 28px;padding: 5px;height: auto;font-weight: bold;font-family: Heebo, sans-serif;margin-bottom: 0px;"><%= item.title %></h1>
+                                    <p class="text-right float-left" style="width: 50%;color: rgb(0,128,255);font-family: Heebo, sans-serif;font-weight: bold;font-size: 20px;height: 40px;padding: 10px;margin-bottom: 6px;"><%= item.price %>€<br><br></p>
+                                    <p class="text-left float-left visible" style="width: 100%;height: auto;font-family: Heebo, sans-serif;margin-bottom: 16px;"><%= item.description %>&nbsp;<br></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                        <% } %>
+                    </div>
+                </div>
+                <div style="background-color: #ffffff;height: auto;width: 100%;">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8 col-lg-8 col-xl-8">
+                            <h1 class="shadow float-left" style="font-weight: bold;font-family: Heebo, sans-serif;width: 100%;height: 50.4px;margin-bottom: 0px;font-size: 30px;line-height: 1.7;letter-spacing: 0px;background-color: #ffffff;">Totale:</h1>
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center align-items-center" style="height: auto;width: 618px;">
+                            <p class="d-flex float-left d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" id="total" style="width: 100%;height: 50.4px;font-weight: bold;font-family: Heebo, sans-serif;font-size: 25px;margin-bottom: 0px;line-height: 0;background-color: #ffffff;"><%= total %> €<br><br></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="height: auto;">
+                    <div class="col">
+                        <div class="d-flex float-left d-sm-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" style="width: 100%;height: 121px;"><button class="btn btn-success shadow" type="button" onclick="checkout()" style="width: 80%;height: 40%;font-family: Heebo, sans-serif;font-size: 19px;background-color: rgb(73,48,226);">ACQUISTA</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-1 col-sm-1 col-md-1 col-lg-2 col-xl-2">
+            <div></div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="./" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="./contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="./policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2022</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script src="scripts/cart/cart.js"></script>
+    <script type="text/javascript">
+        function checkout() {
+        
+            const stripe = Stripe("<%= public_key %>");
+        
+            fetch('./catalogo/checkout', {
+                headers: { 'Content-Type': 'application/json' },
+                method: 'POST'
+            }).then(function (response) {
+                return response.json();
+            }).then(function (session) {
+                return stripe.redirectToCheckout({ sessionId: session.id });
+            }).then(function (result) {
+                if (result.error) {
+                    alert(result.error.message);
+                }
+            }).catch(function (error) {
+                console.log("Error", error);
+            });
+            
+        }
+    </script>
+
+</body>
+
+</html>
