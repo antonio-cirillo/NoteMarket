@@ -8,7 +8,9 @@ const userSchema = new mongoose.Schema({
     dob: { type: Date, required: true },
     status: { type: String, required: true },
     activeToken: String,
-    activeExpires: Date
+    activeExpires: Date,
+    itemsBuyed: [{ type: String }],
+    itemsSelling: [{ type: String }]
 }, {
     versionKey: false
 });
@@ -21,7 +23,8 @@ const catalogSchema = new mongoose.Schema({
     file: { type: String, required: true },
     emailVendor: { type: String, required: true },
     status: { type: String, required: true },
-    emailModerator: String
+    emailModerator: String,
+    comments: [{ }]
 }, {
     versionKey: false
 });

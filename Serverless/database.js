@@ -9,7 +9,8 @@ module.exports = {
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: 'dev.cirillo@gmail.com',
-            status: 'notVerified'
+            status: 'notVerified',
+            comments: []
         },
         {
             title: 'Sicurezza dei Dati',
@@ -19,7 +20,21 @@ module.exports = {
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: '',
-            status: 'verified'
+            status: 'verified',
+            comments: [
+                {
+                    email: 'commento@email.it',
+                    comment: 'Appunti fatti molto bene, complimenti.'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Grazie a te sono riuscito a passare l\'esame, ti ringrazio!'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Ottima struttura degli appunti, fogli puliti, pochi colori e molto dettagliati, grazie mille!'
+                }
+            ]
         },
         {
             title: 'Cloud Computing',
@@ -29,7 +44,8 @@ module.exports = {
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: '',
-            status: 'verified'
+            status: 'verified',
+            comments: []
         },
         {
             title: 'Reti Geografiche',
@@ -39,7 +55,21 @@ module.exports = {
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: '',
-            status: 'verified'
+            status: 'verified',
+            comments: [
+                {
+                    email: 'commento@email.it',
+                    comment: 'Appunti orrendi, davvero pessimi, soldi buttati.'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Grazie a te sono riuscito a passare l\'esame, ti ringrazio!'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Sconsiglio vivamente di acquistare questi appunti, davvero fatti male!'
+                }
+            ]
         },
         {
             title: 'Compilatori',
@@ -49,7 +79,21 @@ module.exports = {
             file: 'https://www.axitech.it/sites/default/files/attachment/esempio_PDF.pdf',
             emailVendor: 'verificato@email.it',
             emailModerator: '',
-            status: 'verified'
+            status: 'verified',
+            comments: [
+                {
+                    email: 'commento@email.it',
+                    comment: 'Appunti fatti molto bene, complimenti.'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Grazie a te sono riuscito a passare l\'esame, ti ringrazio!'
+                },
+                {
+                    email: 'commento@email.it',
+                    comment: 'Ottima struttura degli appunti, fogli puliti, pochi colori e molto dettagliati, grazie mille!'
+                }
+            ]
         }
     ],
 
@@ -62,7 +106,9 @@ module.exports = {
             dob: new Date(1999, 1, 1),
             status: 'verified',
             activeToken: '',
-            activeExpires: null
+            activeExpires: null,
+            itemsBuyed: [],
+            itemsSelling: []
         },
         {
             email: 'nonverificato@email.it',
@@ -72,7 +118,9 @@ module.exports = {
             dob: new Date(1999, 1, 1),
             status: 'notVerified',
             activeToken: '',
-            activeExpires: null
+            activeExpires: null,
+            itemsBuyed: [],
+            itemsSelling: []
         }
     ]
 }
