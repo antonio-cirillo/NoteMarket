@@ -142,6 +142,10 @@
         }
     </script>
 
+    <% if (confirm) { %><script>$(document).ready(() => { toastr.success("Acquisto effettuato con successo!"); });</script><% } %>
+    <% if (error == 'payment') { %><script>$(document).ready(() => { toastr.error("Ops! Qualcosa è andato storto"); });</script><% } %>
+    <% if (error == 'cancel') { %><script>$(document).ready(() => { toastr.error("Pagamento annulato!"); });</script><% } %>
+
 </body>
 
 </html>
