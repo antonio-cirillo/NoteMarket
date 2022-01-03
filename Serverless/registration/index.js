@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Users } = require('../models.js');
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const crypto = require('crypto');
 require('dotenv').config();
 
@@ -38,7 +38,8 @@ module.exports = async function (context, req) {
         const activeExpires = Date.now() + 24 * 3600 * 1000;
         
         // Registration successful
-        const hashedPassword = bcrypt.hashSync(password, 12);
+        const salt = bcrypt.genSaltSync(12);
+        const hashedPassword = bcrypt.hashSync(password, salt);
 
         // Create user
         new Users({
@@ -59,6 +60,7 @@ module.exports = async function (context, req) {
         return;
 
     } catch (error) {
+        console.log(error);
         // Return generic error
         context.res = { body: { error: "genericError" } };
         return;

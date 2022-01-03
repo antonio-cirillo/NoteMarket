@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Users } = require('../models.js');
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 require('dotenv').config();
 
 module.exports = async function (context, req) {
@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
             return;
         } else {
             // Check password
-            const match = await bcrypt.compare(password, user.password);
+            const match = bcrypt.compareSync(password, user.password);
             if (!match) {
                 context.res = { body: { error: "credentialError" } };
                 return;

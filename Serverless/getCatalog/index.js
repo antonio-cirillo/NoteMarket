@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { Catalog } = require('../models.js');
 
-const bcrypt = require('bcrypt');
 require('dotenv').config();
 
 module.exports = async function (context, req) {
