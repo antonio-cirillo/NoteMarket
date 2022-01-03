@@ -5,6 +5,19 @@ export async function getCart(req, res) {
     // Declare object for ejs
     let object = {};
 
+    // Check error
+    if (req.query.error) {
+        object.error = req.query.error;
+    } else {
+        object.error = null;
+    }
+    // Check confirm
+    if (req.query.confirm) {
+        object.confirm = true;
+    } else {
+        object.confirm = false;
+    }
+
     // Init items and total parameters
     object.items = [];
     object.total = 0;
@@ -50,6 +63,12 @@ export async function getAddToCart(req, res) {
             res.status(404).json({ error: true });
             return;
         }
+        // Check if item is owned by user
+        if (req.session.user.itemsBuyed.includes(_id) ||
+                req.session.user.itemsSelling.includes(_id)) {
+            res.status(404).json({ error: true });
+            return;
+        }   
         // Check if there is an error
         if (response.data.error) {
             res.status(404).json({ error: true });
