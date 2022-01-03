@@ -61,7 +61,7 @@
                                             <div class="card textwhite text-white shadow" style="background: url(&quot;../images/catalog/sfondo.svg&quot;) center / cover no-repeat, rgba(255,255,255,0);width: 100%;height: 100%;">
                                                 <div class="card-body" style="width: 100%;height: 100%;">
                                                     <p class="m-0" style="font-weight: bold;width: 100%;height: 100%;">Identificativo</p>
-                                                    <p class="text-white small m-0"><%= item._id %></p>
+                                                    <p id="idItem" class="text-white small m-0"><%= item._id %></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,7 +102,7 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-3"><input class="form-control" type="text" id="comment" placeholder="Scrivi un commento..." name="comment"></div>
-                                            <div class="mb-3"><button class="btn btn-primary btn-sm" onclick="addComment(<%= isOwned %>)" data-bss-hover-animate="tada" type="submit" style="background: rgb(92,81,215);">Pubblica</button></div>
+                                            <div class="mb-3"><button class="btn btn-primary btn-sm" onclick="addComment(<%= isOwned %>)" id="publish" data-bss-hover-animate="tada" type="submit" style="background: rgb(92,81,215);">Pubblica</button></div>
                                         </div>
                                     </div>
                                 </div>
@@ -114,17 +114,17 @@
                                             <h6 class="text-primary fw-bold m-0" style="color: rgb(92,81,215);">Sentiment Analysis dei commenti</h6>
                                         </div>
                                         <div class="card-body">
-                                            <h4 class="small fw-bold">Negatività<span class="float-end"><%= item.sentiments.analysis.negative.percent %>%</span></h4>
+                                            <h4 class="small fw-bold">Negatività<span id="negativeValue" class="float-end"><%= item.sentiments.analysis.negative.percent %>%</span></h4>
                                             <div class="progress mb-4">
-                                                <div class="progress-bar bg-danger" aria-valuenow="<%= item.sentiments.analysis.negative.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.negative.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.negative.percent %>%</span></div>
+                                                <div class="progress-bar bg-danger" id="negative" aria-valuenow="<%= item.sentiments.analysis.negative.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.negative.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.negative.percent %>%</span></div>
                                             </div>
-                                            <h4 class="small fw-bold">Neutralità<span class="float-end"><%= item.sentiments.analysis.neutral.percent %>%</span></h4>
+                                            <h4 class="small fw-bold">Neutralità<span id="neutralValue" class="float-end"><%= item.sentiments.analysis.neutral.percent %>%</span></h4>
                                             <div class="progress mb-4">
-                                                <div class="progress-bar bg-warning" aria-valuenow="<%= item.sentiments.analysis.neutral.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.neutral.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.neutral.percent %>%</span></div>
+                                                <div class="progress-bar bg-warning" id="neutral" aria-valuenow="<%= item.sentiments.analysis.neutral.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.neutral.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.neutral.percent %>%</span></div>
                                             </div>
-                                            <h4 class="small fw-bold">Positività<span class="float-end"><%= item.sentiments.analysis.positive.percent %>%</span></h4>
+                                            <h4 class="small fw-bold">Positività<span id="positiveValue" class="float-end"><%= item.sentiments.analysis.positive.percent %>%</span></h4>
                                             <div class="progress mb-4">
-                                                <div class="progress-bar bg-success" aria-valuenow="<%= item.sentiments.analysis.positive.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.positive.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.positive.percent %>%</span></div>
+                                                <div class="progress-bar bg-success" id="positive" aria-valuenow="<%= item.sentiments.analysis.positive.percent %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= item.sentiments.analysis.positive.percent %>%;"><span class="visually-hidden"><%= item.sentiments.analysis.positive.percent %>%</span></div>
                                             </div>
                                         </div>
                                     </div>
@@ -146,7 +146,7 @@
                                                             <th><strong>Commento</strong></th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>                                
+                                                    <tbody id="listComment">                                
                                                         <% for (comment of item.comments) { %>
                                                         <tr>
                                                             <td class="d-none d-print-table-cell d-md-table-cell d-lg-table-cell d-xl-table-cell d-xxl-table-cell"><%= comment.email %></td>
@@ -195,6 +195,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script src="../scripts/regex.js"></script>
     <script src="../scripts/catalog/item.js"></script>
 
 </body>
