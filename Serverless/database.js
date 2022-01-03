@@ -10,7 +10,24 @@ module.exports = {
             emailVendor: 'verificato@email.it',
             emailModerator: 'dev.cirillo@gmail.com',
             status: 'notVerified',
-            comments: []
+            comments: [],
+            sentiments: { 
+                count: 0, 
+                analysis: {
+                    positive: { 
+                        percent: 0,
+                        count: 0
+                    },
+                    negative: {
+                        percent: 0,
+                        count: 0
+                    },
+                    neutral: {
+                        percent: 0,
+                        count: 0
+                    },
+                }
+            }
         },
         {
             title: 'Sicurezza dei Dati',
@@ -34,7 +51,24 @@ module.exports = {
                     email: 'commento@email.it',
                     comment: 'Ottima struttura degli appunti, fogli puliti, pochi colori e molto dettagliati, grazie mille!'
                 }
-            ]
+            ],
+            sentiments: { 
+                count: 3, 
+                analysis: {
+                    positive: { 
+                        percent: 100,
+                        count: 3
+                    },
+                    negative: {
+                        percent: 0,
+                        count: 0
+                    },
+                    neutral: {
+                        percent: 0,
+                        count: 0
+                    },
+                }
+            }
         },
         {
             title: 'Cloud Computing',
@@ -45,7 +79,24 @@ module.exports = {
             emailVendor: 'verificato@email.it',
             emailModerator: '',
             status: 'verified',
-            comments: []
+            comments: [],
+            sentiments: { 
+                count: 0, 
+                analysis: {
+                    positive: { 
+                        percent: 0,
+                        count: 0
+                    },
+                    negative: {
+                        percent: 0,
+                        count: 0
+                    },
+                    neutral: {
+                        percent: 0,
+                        count: 0
+                    },
+                }
+            }
         },
         {
             title: 'Reti Geografiche',
@@ -69,7 +120,24 @@ module.exports = {
                     email: 'commento@email.it',
                     comment: 'Sconsiglio vivamente di acquistare questi appunti, davvero fatti male!'
                 }
-            ]
+            ],
+            sentiments: { 
+                count: 3, 
+                analysis: {
+                    positive: { 
+                        percent: 33,
+                        count: 1
+                    },
+                    negative: {
+                        percent: 67,
+                        count: 2
+                    },
+                    neutral: {
+                        percent: 0,
+                        count: 0
+                    },
+                }
+            }
         },
         {
             title: 'Compilatori',
@@ -93,7 +161,24 @@ module.exports = {
                     email: 'commento@email.it',
                     comment: 'Ottima struttura degli appunti, fogli puliti, pochi colori e molto dettagliati, grazie mille!'
                 }
-            ]
+            ],
+            sentiments: { 
+                count: 3, 
+                analysis: {
+                    positive: { 
+                        percent: 100,
+                        count: 3
+                    },
+                    negative: {
+                        percent: 0,
+                        count: 0
+                    },
+                    neutral: {
+                        percent: 0,
+                        count: 0
+                    },
+                }
+            }
         }
     ],
 
