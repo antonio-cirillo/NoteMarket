@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const COMMENT_REGEX = /[a-zA-Z0-9@=\-'"]{3,256}/;
+
 export function getCatalog(req, res) {
     
     // Declare object for ejs
@@ -121,5 +123,53 @@ export async function getItem(req, res) {
     }
 
     res.render('item', object);
+
+}
+
+export async function postComment(req, res) {
+    
+    // Get id of item
+    const _id = req.params._id;
+    const comment = req.body.comment;
+    const email = req.session.user.email;
+
+    // If user can't post comment because he doesn't own item
+    if (!(req.session.user.itemsBuyed.includes(_id))) {
+        res.status(404).json({ error: true });
+        return;
+    }
+
+    // Test if comment match with pattern
+    if (!COMMENT_REGEX.test(comment)) {
+        res.status(404).json({ error: true });
+        return;
+    }
+
+    try {
+
+        // Call serverless for post comment
+        const response = await axios.post(process.env.URL_FUNCTION_POST_COMMENT, {
+            _id: _id,
+            email: email,
+            comment: comment
+        });
+
+        // Check if there is an error
+        if (response.data.error) {
+            res.status(404).json({ error: true });
+            return;
+        } 
+
+        // Retrive email
+        response.data.email = req.session.user.email;
+
+        // Send new sentiment analysis data
+        res.status(200).json(response.data);
+        return;
+
+    } catch (error) {
+        res.status(404).json({ error: true });
+        return;
+    }
 
 }
