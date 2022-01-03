@@ -97,7 +97,7 @@ export function postRegistration(req, res) {
                 + `Saluti, il team di NoteMarket!`
                 + `\n\n\n` 
                 + `Clicca su questo link per attivare l'account:\n`
-                + `http://localhost/attiva-account?token=${response.data.activeToken}`
+                + `${process.env.YOUR_DOMAIN}/attiva-account?token=${response.data.activeToken}`
             // Send email with activeToken
             axios.post(process.env.URL_FUNCTION_EMAIL_SENDER, {
                 email: email,
