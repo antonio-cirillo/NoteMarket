@@ -8,7 +8,7 @@ import { getRegistration, postRegistration } from './registration.js';
 import { getActiveAccount } from './activeAccount.js';
 import { getCatalog, getItem } from './catalog.js';
 import { getCart, getAddToCart, getRemoveToCart } from './cart.js';
-import { getSuccess, postCheckout } from './checkout.js';
+import { getSuccess, getCancel, postCheckout } from './checkout.js';
 
 // Import interceptors
 import isUserLogged from '../interceptors/isUserLogged.js';
@@ -54,7 +54,9 @@ router.get('/carrello', isNotUserLogged, getCart);
 //===================== CHECKOUT PAGE =====================//
 router.post('/catalogo/checkout', isNotUserLogged, postCheckout);
 
-router.get('/catalogo/checkout/success', getSuccess);
+router.get('/catalogo/checkout/success', isNotUserLogged, getSuccess);
+
+router.get('/catalogo/checkout/cancel', isNotUserLogged, getCancel);
 
 // Export router
 export default router;
