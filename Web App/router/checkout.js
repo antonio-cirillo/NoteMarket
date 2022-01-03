@@ -58,9 +58,44 @@ export async function postCheckout(req, res) {
 }
 
 export async function getSuccess(req, res) {
-    
-    // Empty cart
+
+    // Its just a test, obv this method is not safety, because if user get request to
+    // this url can get all products inside cart free. But this is just a dimostration!    
+
+    if (req.session.cart.length == 0) {
+        res.redirect('../../../carrello?error=payment');
+        return;
+    }
+
+    // Call serverless for checkout
+    try {
+
+        const response = await axios.post(process.env.URL_FUNCTION_CHECKOUT, {
+            email: req.session.user.email,
+            _ids: req.session.cart 
+        });
+
+        if (response.data.error) {
+            res.redirect('../../../carrello?error=payment');
+            return;
+        } else {
+            req.session.user.itemsBuyed = response.data.itemsBuyed;
+        }
+
+    } catch (error) {
+        res.redirect('../../../carrello?error=payment');
+        return;
+    }
+
+    // Clear cart
     req.session.cart = [];
     req.session.save();
 
+    // Redirect to cart
+    res.redirect('../../../carrello?confirm=payment');
+
+}
+
+export function getCancel(req, res) {
+    res.redirect('../../../carrello?error=cancel');   
 }
