@@ -193,13 +193,25 @@ module.exports = {
             itemsSelling: []
         },
         {
-            email: 'nonverificato@email.it',
-            password: '$2a$12$xLmoaZmPZH8JNxUipOIh0O24nWcpqfybzoXvkburCEspmCPc21jha', // NonVerificato123
-            name: 'Account',
-            surname: 'Non Verificato',
+            email: 'moderatore1@email.it',
+            password: '$2a$12$bPiMEnJ/KA2eXnnViSOfwOxR9eZXvTMFNK3JadTkRF2FnGKLKzbES', // Moderatore1
+            name: 'Primo',
+            surname: 'Moderatore',
             dob: new Date(1999, 1, 1),
             itemsBuyed: [],
-            itemsSelling: []
+            itemsSelling: [],
+            moderator: true
+        },
+        {
+            email: 'moderatore2@email.it',
+            password: '$2a$12$4JjCmsPT61S68jIb35WvlegmXnEnc8HfYuJQta0xNK7xxw8jYFvvm', // Moderatore2
+            name: 'Secondo',
+            surname: 'Moderatore',
+            dob: new Date(1999, 1, 1),
+            itemsBuyed: [],
+            itemsSelling: [],
+            moderator: true,
+            itemsAssigned: 3
         }
     ]
 }
