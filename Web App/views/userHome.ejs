@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="./fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="./stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="./stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="./stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="./images/icon.ico">
+
+</head>
+
+<body style="background-color: white;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg shadow-sm sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="./images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="./logout" style="background-color: rgba(0,0,0,0);">Esci</a>
+                	<button class="btn btn-light action-button" data-bss-hover-animate="tada" type="button" onclick="window.location.href='./carrello'">Carrello</button>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <div id="wrapper" style="padding: 10px;">
+        <div class="d-flex flex-column" id="content-wrapper" style="font-family: Heebo, sans-serif;background: rgb(255,255,255);">
+            <div id="content">
+                <div class="container-fluid">
+                    <h3 class="mb-4" style="font-weight: bold;color: #5c51d7;">Bentornato <%= user.name %> <%= user.surname %></h3>
+                    <div class="row mb-3">
+                        <div class="col-lg-4">
+                            <div class="card mb-3">
+                                <div class="card-body text-center shadow"><img class="mb-3 mt-4" src="images/index/user.png" width="160" height="160"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card shadow mb-3">
+                                        <div class="card-header py-3">
+                                            <p class="m-0 fw-bold" style="color: rgb(92,81,215);">Inserisci un nuovo appunto</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="POST" action="./catalogo/aggiungi-appunto" enctype="multipart/form-data">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="title" style="color: rgb(133,135,150);"><strong>Titolo</strong></label><input class="form-control" type="text" id="username" placeholder="Inserisci il titolo" name="title"></div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="price" style="color: rgb(133,135,150);"><strong>Prezzo</strong><br></label><input class="form-control" type="text" id="email" placeholder="Inserisci il prezzo" name="price"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="description" style="color: rgb(133,135,150);"><strong>Descrizione</strong><br></label><input class="form-control" type="text" id="first_name-1" placeholder="Inserisci la descrizione" name="description"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="image" style="color: rgb(133,135,150);"><strong>Carica il file relativo all'immagine di copertina</strong><br></label><input class="form-control" type="file" accept="image/*" name="image"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="mb-3"><label class="form-label" for="item" style="color: rgb(133,135,150);"><strong>Carica il file relativo all'appunto (.pdf)</strong><br></label><input class="form-control" type="file" accept="application/pdf" name="item"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"><button class="btn btn-sm" type="submit" style="background: #5c51d7;color: rgb(255,255,255);">Pubblica appunto</button></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow mb-5">
+                        <div class="card-header py-3">
+                            <p class="m-0 fw-bold" style="color: rgb(92,81,215);">I tuoi appunti</p>
+                        </div>
+                        <div class="card-body">
+                            <div style="width: 100%;height: 57%;background-color: #f3f3f3;padding: 15px;">
+                                <div class="container scstyle-6 sc-overflow" style="background-color: #f6f6f6;width: 100%;height: 100%;padding: 14px;">
+                                    <div class="border rounded shadow" style="width: 100%;height: auto;background-color: #ffffff;margin-bottom: 5px;">
+                                        <div class="row" style="height: auto;margin: 0px;">
+                                            <div class="col-1 col-xl-1 offset-0 d-md-flex d-lg-flex justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;">
+                                                <div class="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" style="height: 100%;width: 100%;margin-left: 0px;"><i class="fa fa-download" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-size: 34px;color: rgb(92,81,215);border-color: rgba(255,255,255,0);" title="rimuovi"></i></div>
+                                            </div>
+                                            <div class="col-3 col-xl-2 d-sm-flex d-md-flex d-lg-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;padding: 0px;">
+                                                <div class="d-xxl-flex justify-content-xxl-center align-items-xxl-center" style="height: auto;width: 100%;padding: 10px;"><img src="3.jpg" style="max-height: 30%;height: auto;max-width: 75%;min-width: 50%;"></div>
+                                            </div>
+                                            <div class="col" style="height: auto;">
+                                                <div></div>
+                                                <h1 class="text-start float-start" style="width: 50%;font-size: 28px;padding: 5px;height: auto;font-weight: bold;font-family: Heebo, sans-serif;margin-bottom: 0px;color: rgb(248,180,0);">titolo appunto</h1>
+                                                <p class="text-start float-start visible" style="width: 100%;height: auto;font-family: Heebo, sans-serif;margin-bottom: 16px;color: rgb(133,135,150);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut nunc eget tortor ultricies pellentesque.&nbsp;<br></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="./contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="./policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2022</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <% if (confirm != '') { %><script>$(document).ready(() => { toastr.success("<%= confirm %>"); });</script><% } %>
+    <% if (error != '') { %><script>$(document).ready(() => { toastr.error("<%= error %>"); });</script><% } %>
+
+</body>
+
+</html>
