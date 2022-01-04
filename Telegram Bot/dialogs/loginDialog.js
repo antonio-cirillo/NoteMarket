@@ -1,5 +1,6 @@
 const { MessageFactory, InputHints } = require('botbuilder');
 const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
+const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
 
 const MAIN_WATERFALL_DIALOG = 'loginWaterfallDialog';
 const TEXT_PROMPT = 'loginTextprompt';
@@ -7,7 +8,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-
 const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
 
 class LoginDialog extends CancelAndHelpDialog {
-    constructor() {
+    constructor(id) {
         super(id || 'LoginDialog');
 
         // Define the main dialog and its related components.

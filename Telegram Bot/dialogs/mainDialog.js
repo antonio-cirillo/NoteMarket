@@ -2,25 +2,28 @@
 // Licensed under the MIT License.
 
 const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-expression');
-const { MessageFactory, InputHints } = require('botbuilder');
+const { MessageFactory, InputHints, ActivityHandler, ActionTypes, ActivityTypes, CardFactory } = require('botbuilder');
 const { LuisRecognizer } = require('botbuilder-ai');
-const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
+const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
+const { LoginDialog } = require('./loginDialog');
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
 class MainDialog extends ComponentDialog {
-    constructor(luisRecognizer, bookingDialog) {
+    //Constructor initialized with all dialogs and components to use
+    constructor(luisRecognizer, loginDialog) {
         super('MainDialog');
 
         if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
         this.luisRecognizer = luisRecognizer;
 
-        if (!bookingDialog) throw new Error('[MainDialog]: Missing parameter \'bookingDialog\' is required');
+        if (!loginDialog) throw new Error('[MainDialog]: Missing parameter \'loginDialog\' is required');
 
         // Define the main dialog and its related components.
         // This is a sample "book a flight" dialog.
         this.addDialog(new TextPrompt('TextPrompt'))
-            .addDialog(bookingDialog)
+            .addDialog(new LoginDialog('loginDialog'))
+            .addDialog(new ChoicePrompt('cardPrompt'))
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
                 this.introStep.bind(this),
                 this.actStep.bind(this),
@@ -54,12 +57,12 @@ class MainDialog extends ComponentDialog {
      */
     async introStep(stepContext) {
         if (!this.luisRecognizer.isConfigured) {
-            const messageText = 'NOTE: LUIS is not configured. To enable all capabilities, add `LuisAppId`, `LuisAPIKey` and `LuisAPIHostName` to the .env file.';
+            const messageText = 'NOTA: Luis non configurato per debug';
             await stepContext.context.sendActivity(messageText, null, InputHints.IgnoringInput);
             return await stepContext.next();
         }
 
-        const messageText = stepContext.options.restartMsg ? stepContext.options.restartMsg : 'What can I help you with today?\nSay something like "Book a flight from Paris to Berlin on March 22, 2020"';
+        const messageText = stepContext.options.restartMsg ? stepContext.options.restartMsg : 'Scrivi cosa vuoi fare';
         const promptMessage = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
         return await stepContext.prompt('TextPrompt', { prompt: promptMessage });
     }
@@ -69,11 +72,19 @@ class MainDialog extends ComponentDialog {
      * Then, it hands off to the bookingDialog child dialog to collect any remaining details.
      */
     async actStep(stepContext) {
-        const bookingDetails = {};
+        const userDetails = {};
 
         if (!this.luisRecognizer.isConfigured) {
             // LUIS is not configured, we just run the BookingDialog path.
-            return await stepContext.beginDialog('bookingDialog', bookingDetails);
+            // Create the PromptOptions which contain the prompt and re-prompt messages.
+            // PromptOptions also contains the list of choices available to the user.
+            const options = {
+                prompt: 'Cosa possiamo fare per te?',
+                retryPrompt: 'La risposta non è valida, riprova.',
+                choices: this.getChoices()
+            };
+            // Prompt the user with the configured PromptOptions.
+            return await stepContext.prompt('cardPrompt', options);
         }
 
         // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt)
@@ -140,22 +151,34 @@ class MainDialog extends ComponentDialog {
      * It wraps up the sample "book a flight" interaction with a simple confirmation.
      */
     async finalStep(stepContext) {
-        // If the child dialog ("bookingDialog") was cancelled or the user failed to confirm, the Result here will be null.
-        if (stepContext.result) {
-            const result = stepContext.result;
-            // Now we have all the booking details.
-
-            // This is where calls to the booking AOU service or database would go.
-
-            // If the call to the booking service was successful tell the user.
-            const timeProperty = new TimexProperty(result.travelDate);
-            const travelDateMsg = timeProperty.toNaturalLanguage(new Date(Date.now()));
-            const msg = `I have you booked to ${ result.destination } from ${ result.origin } on ${ travelDateMsg }.`;
-            await stepContext.context.sendActivity(msg, msg, InputHints.IgnoringInput);
+        switch (stepContext.result.value) {
+            case 'Login':
+                result = await stepContext.beginDialog('loginDialog', userDetails);
+                break;
+            case 'Visualizza acquisti':
+                result = await stepContext.beginDialog(/*Inserire nome dialogo qui */'fakeName', userDetails);
+                break;
+            default:
+                break;
         }
 
         // Restart the main dialog with a different message the second time around
-        return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'What else can I do for you?' });
+        return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'Cos\'altro possiamo fare per te?' });
+    }
+
+    getChoices() {
+        const cardOptions = [
+            {
+                value: 'Login',
+                synonyms: ['login']
+            },
+            {
+                value: 'Visualizza acquisti',
+                synonyms: ['acquisti', 'ordini']
+            }
+        ];
+
+        return cardOptions;
     }
 }
 
