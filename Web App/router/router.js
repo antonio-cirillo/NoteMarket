@@ -6,7 +6,7 @@ import { getIndex } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
-import { getCatalog, getItem, postComment, postItem } from './catalog.js';
+import { getCatalog, getDownload, getItem, postComment, postItem } from './catalog.js';
 import { getCart, getAddToCart, getRemoveToCart } from './cart.js';
 import { getSuccess, getCancel, postCheckout } from './checkout.js';
 
@@ -52,7 +52,9 @@ router.post('/catalogo/rimuovi-dal-carrello', isNotUserLogged, getRemoveToCart);
 //======================= ITEM PAGE =======================//
 router.get('/catalogo/:_id', getItem);
 
-router.post('/catalogo/:_id/scriviCommento', isNotUserLogged, postComment);
+router.post('/catalogo/:_id/scrivi-commento', isNotUserLogged, postComment);
+
+router.get('/catalogo/:_id/scarica-appunto', isNotUserLogged, getDownload);
 
 //======================= CART PAGE =======================//
 router.get('/carrello', isNotUserLogged, getCart);
