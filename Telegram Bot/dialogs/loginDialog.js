@@ -11,7 +11,6 @@ const userDetails = null;
 class LoginDialog extends CancelAndHelpDialog {
     constructor(id) {
         super(id || 'LoginDialog');
-        userDetails = stepContext.options;
         // Define the main dialog and its related components.
         this.addDialog(new TextPrompt(TEXT_PROMPT))
             .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
@@ -26,7 +25,8 @@ class LoginDialog extends CancelAndHelpDialog {
 
     //Prompt the user to enter its credentials
     async emailStep(stepContext) {
-         stepContext.values.accountDetails = {email: null, password: null};
+        userDetails = stepContext.options;
+        stepContext.values.accountDetails = {email: null, password: null};
 
         if (!accountDetails.email) {
             const messageText = 'Enter your email';
