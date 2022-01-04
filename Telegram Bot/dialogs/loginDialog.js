@@ -6,6 +6,7 @@ const MAIN_WATERFALL_DIALOG = 'loginWaterfallDialog';
 const TEXT_PROMPT = 'loginTextprompt';
 const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-Z0-9]{1,46}\.[a-zA-Z]{2,4}$/;
 const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
+const userDetails = stepContext.options;
 
 class LoginDialog extends CancelAndHelpDialog {
     constructor(id) {
@@ -91,6 +92,7 @@ class LoginDialog extends CancelAndHelpDialog {
             }
         }catch(error){}
 
+        //TODO: put response.data in userDetails object
         return await stepContext.endDialog(response.data);
     }
 }
