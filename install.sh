@@ -6,6 +6,8 @@ region="westeurope"
 databaseName="notemarket-db"
 # Cognitive Service name
 cognitiveServiceName="notemarket-cs"
+# Storage Account name
+storageAccountName="notemarket"
 
 echo "Creating resource group..."
 az group create -l $region -n $resourceGroupName
@@ -32,3 +34,11 @@ az cognitiveservices account create \
     --location westus2 \
     --yes
 echo "Cognitive service created!"
+
+echo "Creating storage account..."
+az storage account create \
+    -n $storageAccountName \
+    -g $resourceGroupName \
+    -l $region \
+    --sku Standard_LRS
+echo "Storage account created!" 
