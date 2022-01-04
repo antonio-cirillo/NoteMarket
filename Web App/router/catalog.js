@@ -1,4 +1,12 @@
 import axios from 'axios';
+import fs from 'fs'
+import mime from 'mime-types';
+import dotenv from 'dotenv'
+dotenv.config();
+
+import{ BlobServiceClient } from '@azure/storage-blob';
+const blobServiceClient = BlobServiceClient.fromConnectionString(
+    process.env.STORAGE_STRING_CONNECTION);
 
 const COMMENT_REGEX = /[a-zA-Z0-9@=\-'"]{3,256}/;
 
@@ -169,6 +177,64 @@ export async function postComment(req, res) {
 
     } catch (error) {
         res.status(404).json({ error: true });
+        return;
+    }
+
+}
+
+export async function postItem(req, res) {
+    
+    const { title, price, description } = req.body;
+
+    console.log(req.files);
+
+    // Check on image
+    const image = req.files.image[0];
+    const IMAGES_MIME_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+
+    if (IMAGES_MIME_TYPES.indexOf(image.mimetype) == -1) {
+        res.redirect('../../?error=Immagine%20non%20supportata!');
+        return;
+    }
+    if (image.size > 2000000) { // 2 MB
+        res.redirect('../../?error=L\'%20immagine%20non%20deve%20superare%20i%202%20mb!');
+        return;
+    }
+    const imageData = fs.createReadStream(image.path);
+
+    // Check on pdf
+    const item = req.files.item[0];
+    if (item.mimetype != 'application/pdf') {
+        res.redirect('../../?error=File%20non%20supportato!');
+        return;
+    }
+    if (item.size > 20000000) { // 20 MB
+        res.redirect('../../?error=Il%20file%20non%20deve%20superare%20i%2020%20mb!');
+        return;
+    }
+    const itemData = fs.createReadStream(item.path);
+
+    // Call serverless for upload item
+    try {
+
+        // Name of container
+        const NAME_CONTAINER = 'notemarketcontainer';
+
+        // Get a reference to a container
+        const containerClient = blobServiceClient.getContainerClient(NAME_CONTAINER);
+        await containerClient.createIfNotExists();
+
+        // Upload image
+        let blockBlobClient = containerClient.getBlockBlobClient(
+            `${image.filename}.${mime.extension(image.mimetype)}`);
+        await blockBlobClient.uploadStream(imageData, 4 * 1024 * 1024, 20);
+
+        // Upload item
+        blockBlobClient = containerClient.getBlockBlobClient(`${item.filename}.pdf`);
+        await blockBlobClient.uploadStream(itemData, 4 * 1024 * 1024, 20);
+
+    } catch (error) {
+        res.redirect('../../?error=Ops!%Qualcosa%20è%20andato%20storto.');
         return;
     }
 
