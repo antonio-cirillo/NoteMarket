@@ -39,7 +39,7 @@ export async function postCheckout(req, res) {
                     name: product.title,
                     images: [product.image]
                 },
-                unit_amount: Math.round(product.price) * 100
+                unit_amount: product.price * 100
             },
             quantity: 1,
         };

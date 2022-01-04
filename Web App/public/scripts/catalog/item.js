@@ -62,7 +62,7 @@ function addComment(isOwned) {
         if (flag) {
             $.ajax({
                 type: "POST",
-                url: `${window.location.href}/scriviCommento`,
+                url: `${window.location.href}/scrivi-commento`,
                 data: {
                     comment: comment 
                 },
