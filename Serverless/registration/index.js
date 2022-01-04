@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const { Users } = require('../models.js');
 
 const bcrypt = require('bcrypt-nodejs');
-const crypto = require('crypto');
 require('dotenv').config();
 
 module.exports = async function (context, req) {
@@ -33,10 +32,6 @@ module.exports = async function (context, req) {
             return;
         }
     
-        // Generate token for registration        
-        const activeToken = crypto.randomBytes(20).toString('hex');
-        const activeExpires = Date.now() + 24 * 3600 * 1000;
-        
         // Registration successful
         const salt = bcrypt.genSaltSync(12);
         const hashedPassword = bcrypt.hashSync(password, salt);
@@ -48,15 +43,12 @@ module.exports = async function (context, req) {
             name: name,
             surname: surname,
             dob: dob,
-            status: "notVerified",
-            activeToken: activeToken,
-            activeExpires: activeExpires,
             itemsBuyed: [],
             itemsSelling: []            
         }).save();
 
         // Return token
-        context.res = { body: { activeToken: activeToken } };
+        context.res = { body: { flag: true } };
         return;
 
     } catch (error) {

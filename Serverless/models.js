@@ -6,9 +6,6 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     surname: { type: String, required: true },
     dob: { type: Date, required: true },
-    status: { type: String, required: true },
-    activeToken: String,
-    activeExpires: Date,
     itemsBuyed: [{ type: String }],
     itemsSelling: [{ type: String }],
 }, {

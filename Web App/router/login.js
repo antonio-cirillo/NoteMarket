@@ -11,8 +11,6 @@ export function getLogin(req, res) {
     if (req.query.confirm != null) {
         if (req.query.confirm == 'registration') {
             confirm = 'registrationConfirm';
-        } else if (req.query.confirm == 'verify') {
-            confirm = 'verifyConfirm';
         }
     }
 

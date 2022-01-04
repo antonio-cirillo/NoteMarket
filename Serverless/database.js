@@ -189,9 +189,6 @@ module.exports = {
             name: 'Account',
             surname: 'Verificato',
             dob: new Date(1999, 1, 1),
-            status: 'verified',
-            activeToken: '',
-            activeExpires: null,
             itemsBuyed: [],
             itemsSelling: []
         },
@@ -201,9 +198,6 @@ module.exports = {
             name: 'Account',
             surname: 'Non Verificato',
             dob: new Date(1999, 1, 1),
-            status: 'notVerified',
-            activeToken: '',
-            activeExpires: null,
             itemsBuyed: [],
             itemsSelling: []
         }

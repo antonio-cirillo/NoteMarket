@@ -5,7 +5,6 @@ import { getIndex } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
-import { getActiveAccount } from './activeAccount.js';
 import { getCatalog, getItem, postComment } from './catalog.js';
 import { getCart, getAddToCart, getRemoveToCart } from './cart.js';
 import { getSuccess, getCancel, postCheckout } from './checkout.js';
@@ -32,9 +31,6 @@ router.all('/logout', isNotUserLogged, allLogout);
 router.get('/registrati', isUserLogged, getRegistration);
 
 router.post('/registrati', isUserLogged, postRegistration);
-
-//================= ACTIVE ACCOUNT PAGE =================//
-router.get('/attiva-account', isUserLogged, getActiveAccount);
 
 //===================== CATALOG PAGE =====================//
 router.get('/catalogo', getCatalog);

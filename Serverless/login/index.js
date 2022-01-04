@@ -31,11 +31,6 @@ module.exports = async function (context, req) {
                 context.res = { body: { error: "credentialError" } };
                 return;
             }
-            // Check user status    
-            if (user.status === "notVerified") {
-                context.res = { body: { error: "notVerifiedError" } };
-                return;
-            } 
             // Successful login
             else {
                 context.res = { body: user };

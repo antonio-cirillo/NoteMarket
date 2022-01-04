@@ -87,43 +87,8 @@ export function postRegistration(req, res) {
             });            
         }
         // Registration successful
-        else {
-            // Declare body of message
-            const body = `Gentile ${name} ${surname}, la ringraziamo per aver effettuato la registrazione sul nostro sito.\n`
-                + `Le ricordiamo che potrà contattarci in ogni momento per richiedere assistenza su qualsiasi cosa.\n`
-                + `Qui in basso troverà il link per poter attivare il suo account.\n`
-                + `Le ricordiamo che il link di attivazione ha una durata di 24 ore. Se l'account non verrà verificato entro questo arco di tempo, l'account verrà eliminato!\n`
-                + `Grazie per la sua fiducia e buona permanenza.\n`
-                + `Saluti, il team di NoteMarket!`
-                + `\n\n\n` 
-                + `Clicca su questo link per attivare l'account:\n`
-                + `${process.env.YOUR_DOMAIN}/attiva-account?token=${response.data.activeToken}`
-            // Send email with activeToken
-            axios.post(process.env.URL_FUNCTION_EMAIL_SENDER, {
-                email: email,
-                subject: 'Registrazione avvenuta con successo!',
-                body: body
-            }).then((response) => {
-                // Check if there is an error
-                if (response.data.error) {
-                    res.render('registration', {
-                        error: true,
-                        messageError: "Errore durante l'invio dell'email. Contatta l'assistenza"
-                    });            
-                }
-                // Email send successful
-                else {
-                    res.redirect('./login?confirm=registration');
-                    return;
-                }
-            }, (error) => {
-                res.render('registration', {
-                    error: true,
-                    messageError: "Errore durante l'invio dell'email. Contatta l'assistenza"
-                });
-                return;
-            });
-        }
+        res.redirect('./login?confirm=registration');
+        return;
     }, (error) => {
         res.render('registration', {
             error: true,
