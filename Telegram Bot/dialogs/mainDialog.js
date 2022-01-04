@@ -9,6 +9,8 @@ const { LoginDialog } = require('./loginDialog');
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
+const userDetails = {};
+
 class MainDialog extends ComponentDialog {
     //Constructor initialized with all dialogs and components to use
     constructor(luisRecognizer, loginDialog) {
@@ -72,8 +74,6 @@ class MainDialog extends ComponentDialog {
      * Then, it hands off to the bookingDialog child dialog to collect any remaining details.
      */
     async actStep(stepContext) {
-        const userDetails = {};
-
         if (!this.luisRecognizer.isConfigured) {
             // LUIS is not configured, we just run the BookingDialog path.
             // Create the PromptOptions which contain the prompt and re-prompt messages.
@@ -156,7 +156,7 @@ class MainDialog extends ComponentDialog {
                 result = await stepContext.beginDialog('loginDialog', userDetails);
                 break;
             case 'Visualizza acquisti':
-                result = await stepContext.beginDialog(/*Inserire nome dialogo qui */'fakeName', userDetails);
+                result = await stepContext.beginDialog(/*TODO: Inserire nome dialogo qui */'fakeName', userDetails);
                 break;
             default:
                 break;
