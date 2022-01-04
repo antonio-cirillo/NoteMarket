@@ -9,7 +9,7 @@ const { LoginDialog } = require('./loginDialog');
 
 const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
 
-const userDetails = {};
+var userDetails = {};
 
 class MainDialog extends ComponentDialog {
     //Constructor initialized with all dialogs and components to use
@@ -148,9 +148,9 @@ class MainDialog extends ComponentDialog {
 
     /**
      * This is the final step in the main waterfall dialog.
-     * It wraps up the sample "book a flight" interaction with a simple confirmation.
      */
     async finalStep(stepContext) {
+        var result = null;
         switch (stepContext.result.value) {
             case 'Login':
                 result = await stepContext.beginDialog('loginDialog', userDetails);
