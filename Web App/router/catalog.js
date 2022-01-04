@@ -1,8 +1,15 @@
 import axios from 'axios';
-import fs from 'fs'
+import fs from 'fs';
+import https from 'https';
 import mime from 'mime-types';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
+
+// Set __dirname in ES6
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 import{ BlobServiceClient } from '@azure/storage-blob';
 const blobServiceClient = BlobServiceClient.fromConnectionString(
@@ -186,8 +193,6 @@ export async function postItem(req, res) {
     
     const { title, price, description } = req.body;
 
-    console.log(req.files);
-
     // Check on image
     const image = req.files.image[0];
     const IMAGES_MIME_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
@@ -217,11 +222,8 @@ export async function postItem(req, res) {
     // Call serverless for upload item
     try {
 
-        // Name of container
-        const NAME_CONTAINER = 'notemarketcontainer';
-
         // Get a reference to a container
-        const containerClient = blobServiceClient.getContainerClient(NAME_CONTAINER);
+        const containerClient = blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER);
         await containerClient.createIfNotExists();
 
         // Upload image
@@ -232,10 +234,86 @@ export async function postItem(req, res) {
         // Upload item
         blockBlobClient = containerClient.getBlockBlobClient(`${item.filename}.pdf`);
         await blockBlobClient.uploadStream(itemData, 4 * 1024 * 1024, 20);
+        
+        const response = await axios.post(process.env.URL_FUNCTION_UPLOAD_ITEM, {
+            title: title,
+            description: description,
+            price: price,
+            image: `${process.env.STORAGE_URL}/${NAME_CONTAINER}/${image.filename}.${mime.extension(image.mimetype)}`,
+            file: `${process.env.STORAGE_URL}/${NAME_CONTAINER}/${item.filename}.pdf`,
+            emailVendor: req.session.user.email
+        });
+
+        // Check if there is an error
+        if (response.data.error) {
+            res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
+            return;
+        }
+        // Post item successful
+        else {
+            fs.rmdir(`${__dirname}/../uploads`, { recursive: true }, (err) => { });
+            res.redirect('../../?confirm=L\'appunto%20è%20stato%20caricato!%20Un%20moderatore%20revisionerà%20l\'appunto%20il%20prima%20possibile.');
+            return;
+        }
 
     } catch (error) {
-        res.redirect('../../?error=Ops!%Qualcosa%20è%20andato%20storto.');
+        console.log(error);
+        res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
         return;
     }
 
+}
+
+export function getDownload(req, res) {
+ 
+    // Get id of item
+    const _id = req.params._id;
+
+    try {
+
+        axios.post(process.env.URL_FUNCTION_GET_ITEM, { _id: _id })
+        .then((response) => {
+            // Check if there is an error
+            if (response.data.error || response.data.status == "notVerified") {
+                res.redirect('../catalogo?error=notFound');
+                return;
+            }
+
+            // Check if user have permission for download item
+            if (!req.session.user.itemsBuyed.includes(_id) && !req.session.user.itemsSelling.includes(_id)) {
+                    res.status(404).json({ error: true });
+                    return;
+            }
+
+            // Download from storage account and send it
+            const path = `${__dirname}/../uploads/${response.data.title}.pdf`;
+            const title =  response.data.title
+
+            let file = fs.createWriteStream(path);
+
+            https.get(`${response.data.file}`, (response) => {
+                response.pipe(file)
+                .on('finish', () => {
+                    file = fs.createReadStream(path);
+                    const stat = fs.statSync(path);
+                    res.setHeader('Content-Length', stat.size);
+                    res.setHeader('Content-Type', 'application/pdf');
+                    res.setHeader('Content-Disposition', `attachment; filename=${title}.pdf`);
+                    file.pipe(res)
+                    .on('finish', () => {
+                        fs.rmdir(`${__dirname}/../uploads`, { recursive: true }, (err) => { });
+                    });
+                });
+            });
+                    
+        }, (error) => {
+            res.status(404).json({ error: true });
+            return;
+        });
+
+    } catch (error) {
+        res.status(404).json({ error: true });
+        return;
+    }
+  
 }
