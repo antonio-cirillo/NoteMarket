@@ -1,11 +1,12 @@
 import express from 'express';
+import multer from 'multer';
 
 // Import routers
 import { getIndex } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
-import { getCatalog, getItem, postComment } from './catalog.js';
+import { getCatalog, getItem, postComment, postItem } from './catalog.js';
 import { getCart, getAddToCart, getRemoveToCart } from './cart.js';
 import { getSuccess, getCancel, postCheckout } from './checkout.js';
 
@@ -15,6 +16,10 @@ import isNotUserLogged from '../interceptors/isNotUserLogged.js';
 
 // Create Router
 const router = express.Router();
+
+// Declare object for upload file from form
+const upload = multer({ dest: 'uploads/' });
+const uploadFile = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'item', maxCount: 1 }]);
 
 //===================== HOME PAGE =====================//
 router.get('/', getIndex);
@@ -34,6 +39,9 @@ router.post('/registrati', isUserLogged, postRegistration);
 
 //===================== CATALOG PAGE =====================//
 router.get('/catalogo', getCatalog);
+
+//===================== ADD ITEM PAGE ====================//
+router.post('/catalogo/aggiungi-appunto', isNotUserLogged, uploadFile, postItem);
 
 //=================== ADD TO CART PAGE ===================//
 router.post('/catalogo/aggiungi-al-carrello', isNotUserLogged, getAddToCart);
