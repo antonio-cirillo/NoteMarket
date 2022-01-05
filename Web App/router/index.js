@@ -4,8 +4,35 @@ export async function getIndex(req, res) {
 
     // If user is logged 
     if (req.session.user) {
-        if (req.session.moderator) {
-            console.log("You are moderator");
+        if (req.session.user.moderator) {
+            try {
+                const response = await axios.post(process.env.URL_FUNCTION_GET_ITEMS_TO_APPROVE, {
+                    email: req.session.user.email
+                });
+                if (response.data.error) {
+                    res.render('moderatorHome', {
+                        error: 'Errore durante la comunicazione col database! Riprovare.',
+                        confirm: '',
+                        user: req.session.user,
+                        items: []
+                    });
+                } else {
+                    res.render('moderatorHome', {
+                        error: (req.query.error) ? req.query.error : '',
+                        confirm: (req.query.confirm) ? req.query.confirm : '',
+                        user: req.session.user,
+                        items: response.data
+                    });
+                }
+            } catch (error) {
+                res.render('moderatorHome', {
+                    error: 'Errore durante la comunicazione col database! Riprovare.',
+                    confirm: '',
+                    user: req.session.user,
+                    items: []
+                });
+                return;
+            }
         } else {
             // Declare list of item owned
             let items = [];
@@ -19,21 +46,7 @@ export async function getIndex(req, res) {
                             confirm: '',
                             user: req.session.user,
                             items: []
-                        })
-                        return;
-                    } else {
-                        items.push(response.data);
-                    }
-                }
-                for (const _id of user.itemsSelling) {
-                    const response = await axios.post(process.env.URL_FUNCTION_GET_ITEM, { _id: _id });
-                    if (response.data.error) {
-                        res.render('userHome', {
-                            error: 'Errore durante la comunicazione col database! Riprovare.',
-                            confirm: '',
-                            user: req.session.user,
-                            items: []
-                        })
+                        });
                         return;
                     } else {
                         items.push(response.data);
@@ -46,7 +59,6 @@ export async function getIndex(req, res) {
                     items: items
                 })
             } catch (error) {
-                console.log(error);
                 res.render('userHome', {
                     error: 'Errore durante la comunicazione col database! Riprovare.',
                     confirm: '',
