@@ -189,8 +189,15 @@ module.exports = {
             name: 'Account',
             surname: 'Verificato',
             dob: new Date(1999, 1, 1),
-            itemsBuyed: [],
-            itemsSelling: []
+            itemsBuyed: []
+        },
+        {
+            email: 'utente@email.it',
+            password: '$2a$12$uJrrdz6kQj2nsgIQAQrKcOh83XecoOtDf2gkLDD69pVjBwVmne3qS', // Utente123
+            name: 'Utente',
+            surname: 'Generico',
+            dob: new Date(1999, 1, 1),
+            itemsBuyed: []
         },
         {
             email: 'moderatore1@email.it',
@@ -198,8 +205,6 @@ module.exports = {
             name: 'Primo',
             surname: 'Moderatore',
             dob: new Date(1999, 1, 1),
-            itemsBuyed: [],
-            itemsSelling: [],
             moderator: true
         },
         {
@@ -208,8 +213,6 @@ module.exports = {
             name: 'Secondo',
             surname: 'Moderatore',
             dob: new Date(1999, 1, 1),
-            itemsBuyed: [],
-            itemsSelling: [],
             moderator: true,
             itemsAssigned: 3
         }
