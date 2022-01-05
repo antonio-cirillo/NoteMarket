@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="fonts/simple-line-icons.min.css">
+    <link rel="stylesheet" href="stylesheets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-menu.css">
+    <link rel="stylesheet" href="stylesheets/menu/navigation-with-button.css">
+    <link rel="stylesheet" href="stylesheets/footer/footer-basic.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Heebo&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="images/icon.ico">
+
+</head>
+
+<body style="background-color: white;">
+
+    <!-- Nav bar -->
+	<nav class="navbar navbar-light navbar-expand-lg shadow-sm sticky-top navigation-clean-button">
+        <div class="container-fluid"><img src="./images/logo.png" style="width: 200px;"><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse"
+                id="navcol-1" style="margin-top: 0px;">
+                <ul class="nav navbar-nav mr-auto" style="margin-top: -15px;">
+                    <li class="nav-item" role="presentation" style="color: rgb(0,0,0);"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="./catalogo">Catalogo</a></li>
+                </ul>
+                <span class="navbar-text actions"> 
+                	<a class="login" href="./logout" style="background-color: rgba(0,0,0,0);">Esci</a>
+                </span>
+        	</div>
+        </div>
+    </nav>
+
+    <div id="wrapper" style="padding: 10px;">
+        <div class="d-flex flex-column" id="content-wrapper" style="font-family: Heebo, sans-serif;background: rgb(255,255,255);">
+            <div id="content">
+                <div class="container-fluid">
+                    <h3 class="mb-4" style="font-weight: bold;color: #5c51d7;">Bentornato <%= user.name %> <%= user.surname %></h3>
+                    <div class="card shadow mb-5">
+                        <div class="card-header py-3">
+                            <p class="m-0 fw-bold" style="color: rgb(92,81,215);">Appunti da revisionare</p>
+                        </div>                        
+                        <div class="card-body" style="min-height: 50vh;">
+                            <% if (items.length == 0) { %>
+                            <div class="row" style="height: auto;margin: 0px;">
+                                <div class="col" style="text-align: center;"><strong style="font-family: Heebo, sans-serif;">Nessun appunto da revisionare!</strong></div>
+                            </div>
+                            <% } else { %>
+                            <div class="border rounded shadow" style="width: 100%;height: auto;background-color: #ffffff;margin-bottom: 5px;">
+                                <% for (item of items) { %>
+                                <div class="row" style="height: auto;margin: 0px;">
+                                    <div class="col-3 col-xl-2 d-none d-print-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;padding: 0px;">
+                                        <div class="d-sm-flex d-md-flex d-lg-flex d-xl-flex d-xxl-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center justify-content-xxl-center align-items-xxl-center" style="height: auto;width: 100%;padding: 10px;"><img src="<%= item.image %>" style="max-height: 30%;height: 85.76px;max-width: 75%;min-width: 50%;width: 150px;"></div>
+                                    </div>
+                                    <div class="col" style="height: auto;">
+                                        <div></div>
+                                        <h1 class="text-start float-start" style="width: 50%;font-size: 28px;padding: 5px;height: auto;font-weight: bold;font-family: Heebo, sans-serif;margin-bottom: 0px;color: rgb(248,180,0);"><%= item.title %></h1>
+                                        <p class="text-end float-start" style="width: 50%;color: #5c51d7;font-family: Heebo, sans-serif;font-weight: bold;font-size: 20px;height: 40px;padding: 10px;margin-bottom: 6px;"><%= item.price %>€<br><br></p>
+                                        <p class="text-start float-start visible" style="width: 100%;height: auto;font-family: Heebo, sans-serif;margin-bottom: 16px;"><%= item.description %>.&nbsp;<br></p>
+                                    </div>
+                                </div>
+                                <div class="row row-cols-1 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-3 d-flex d-md-flex justify-content-center align-items-center justify-content-md-center align-items-md-center" style="height: 100%;margin: 0px;">
+                                    <div class="col d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center" style="height: 100%;margin-bottom: -8px;">
+                                        <div class="mb-3" style="height: 100%;"><button class="btn btn-primary btn-sm" onclick="window.location.href='./catalogo/<%= item._id %>/revisiona-appunto?action=approva'" data-bss-hover-animate="tada" type="button" style="background: rgb(8,197,27);">Approva</button></div>
+                                    </div>
+                                    <div class="col d-flex d-sm-flex d-md-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center" style="height: 100%;margin-bottom: -8px;">
+                                        <div class="mb-3" style="height: 100%;"><button class="btn btn-primary btn-sm"  onclick="window.location.href='./catalogo/<%= item._id %>/scarica-appunto'" data-bss-hover-animate="tada" type="button" style="background: rgb(92,81,215);">Scarica</button></div>
+                                    </div>
+                                    <div class="col d-flex d-sm-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center" style="height: 100%;margin-bottom: -8px;">
+                                        <div class="d-md-flex justify-content-md-center align-items-md-center mb-3" style="height: 100%;margin: 0;"><button class="btn btn-primary btn-sm" onclick="window.location.href='./catalogo/<%= item._id %>/revisiona-appunto?action=respingi'" data-bss-hover-animate="tada" type="button" style="background: rgb(215,89,81);">Respingi</button></div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-dark footer-basic" style="color: rgb(255,255,255);">
+        <footer style="color: rgb(255,255,255);">
+            <div class="social"><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-paper-airplane"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0.1);"><i class="icon ion-social-instagram"></i></a>
+                <a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-twitter"></i></a><a data-bss-hover-animate="tada" href="#" style="background-color: rgba(0,0,0,0);"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#" style="background-color: rgba(0,0,0,0);">Home</a></li>
+                <li class="list-inline-item"><a href="./contattaci" style="background-color: rgba(0,0,0,0);">Contattaci</a></li>
+                <li class="list-inline-item"><a href="./policy" style="background-color: rgba(0,0,0,0);">Condizioni d'uso</a></li>
+            </ul>
+            <p class="copyright">NoteMarket © 2022</p>
+        </footer>
+    </div>
+
+    <script src="scripts/bootstrap/jquery.min.js"></script>
+    <script src="scripts/bootstrap/bs-init.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <% if (confirm != '') { %><script>$(document).ready(() => { toastr.success("<%= confirm %>"); });</script><% } %>
+    <% if (error != '') { %><script>$(document).ready(() => { toastr.error("<%= error %>"); });</script><% } %>
+
+</body>
+
+</html>
