@@ -43,8 +43,7 @@ module.exports = async function (context, req) {
             name: name,
             surname: surname,
             dob: dob,
-            itemsBuyed: [],
-            itemsSelling: []            
+            itemsBuyed: []    
         }).save();
 
         // Return token
