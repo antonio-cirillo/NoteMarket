@@ -23,14 +23,14 @@ module.exports = async function (context, req) {
             .sort({ itemsAssigned: 1 }).limit(1).exec();
 
         // Insert catalog
-        const item = new Catalog({
+        const item = await new Catalog({
             title: title,
             description: description,
             price: parseFloat(price).toFixed(2),
             image: image,
             file: file,
             emailVendor: emailVendor,
-            emailModerator: moderator.email,
+            emailModerator: moderator[0].email,
             status: 'notVerified',
             comments: [],
             sentiments: { 
@@ -52,18 +52,19 @@ module.exports = async function (context, req) {
             }
         }).save();
 
-        // Update counter itemsAssigned for moderator
-        moderator.itemsAssigned +=1;
-        const update = await Users.replaceOne({ email: moderator.email }, moderator);
+            // Update counter itemsAssigned for moderator
+            moderator[0].itemsAssigned +=1;
+            const update = await Users.replaceOne({ email: moderator[0].email }, moderator[0]);
 
-        // Check update
-        if (update.acknowledged) {
-            context.res = { body: item._id };
-            return;
-        } else {
-            context.res = { body: { error: true } };
-            return;
-        }
+            // Check update
+            if (update.acknowledged) {
+                context.res = { body: item._id };
+                return;
+            } else {
+                context.res = { body: { error: true } };
+                return;
+            }
+
 
     } catch (error) {
         console.log(error);
