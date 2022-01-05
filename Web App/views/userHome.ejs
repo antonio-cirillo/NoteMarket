@@ -58,7 +58,7 @@
                                             <p class="m-0 fw-bold" style="color: rgb(92,81,215);">Inserisci un nuovo appunto</p>
                                         </div>
                                         <div class="card-body">
-                                            <form method="POST" action="./catalogo/aggiungi-appunto" enctype="multipart/form-data">
+                                            <form method="POST" id="postItem" action="./catalogo/aggiungi-appunto" enctype="multipart/form-data">
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="mb-3"><label class="form-label" for="title" style="color: rgb(133,135,150);"><strong>Titolo</strong></label><input class="form-control" type="text" id="username" placeholder="Inserisci il titolo" name="title"></div>
@@ -98,19 +98,27 @@
                             <div style="width: 100%;height: 57%;background-color: #f3f3f3;padding: 15px;">
                                 <div class="container scstyle-6 sc-overflow" style="background-color: #f6f6f6;width: 100%;height: 100%;padding: 14px;">
                                     <div class="border rounded shadow" style="width: 100%;height: auto;background-color: #ffffff;margin-bottom: 5px;">
+                                        <% if (items.length == 0) { %>
+                                        <div class="row" style="height: auto;margin: 0px;">
+                                            <div class="col" style="text-align: center;"><strong style="font-family: Heebo, sans-serif;">Non sono presenti elementi nel carrello!</strong></div>
+                                        </div>
+                                        <% } else { %>
+                                        <% for (item of items) { %>
                                         <div class="row" style="height: auto;margin: 0px;">
                                             <div class="col-1 col-xl-1 offset-0 d-md-flex d-lg-flex justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;">
-                                                <div class="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" style="height: 100%;width: 100%;margin-left: 0px;"><i class="fa fa-download" data-bs-toggle="tooltip" data-bss-tooltip="" style="font-size: 34px;color: rgb(92,81,215);border-color: rgba(255,255,255,0);" title="rimuovi"></i></div>
+                                                <div class="d-flex d-sm-flex d-md-flex d-lg-flex d-xl-flex justify-content-center align-items-center justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center justify-content-xl-center align-items-xl-center" onclick="window.location.href='./catalogo/<%= item._id %>/scarica-appunto'" style="height: 100%;width: 100%;margin-left: 0px;"><i class="fa fa-download" data-bs-toggle="tooltip" data-bss-tooltip="" style="cursor: pointer;font-size: 34px;color: rgb(92,81,215);border-color: rgba(255,255,255,0);" title="Scarica"></i></div>
                                             </div>
                                             <div class="col-3 col-xl-2 d-sm-flex d-md-flex d-lg-flex justify-content-sm-center align-items-sm-center justify-content-md-center align-items-md-center justify-content-lg-center align-items-lg-center" style="height: auto;padding: 0px;">
-                                                <div class="d-xxl-flex justify-content-xxl-center align-items-xxl-center" style="height: auto;width: 100%;padding: 10px;"><img src="3.jpg" style="max-height: 30%;height: auto;max-width: 75%;min-width: 50%;"></div>
+                                                <div class="d-xxl-flex justify-content-xxl-center align-items-xxl-center" style="height: auto;width: 100%;padding: 10px;"><img src="<%= item.image %>" style="display: block;margin-left: auto;margin-right: auto;max-height: 30%;height: auto;max-width: 75%;min-width: 50%;"></div>
                                             </div>
                                             <div class="col" style="height: auto;">
                                                 <div></div>
-                                                <h1 class="text-start float-start" style="width: 50%;font-size: 28px;padding: 5px;height: auto;font-weight: bold;font-family: Heebo, sans-serif;margin-bottom: 0px;color: rgb(248,180,0);">titolo appunto</h1>
-                                                <p class="text-start float-start visible" style="width: 100%;height: auto;font-family: Heebo, sans-serif;margin-bottom: 16px;color: rgb(133,135,150);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ut nunc eget tortor ultricies pellentesque.&nbsp;<br></p>
+                                                <h1 class="text-start float-start" style="width: 50%;font-size: 28px;padding: 5px;height: auto;font-weight: bold;font-family: Heebo, sans-serif;margin-bottom: 0px;color: rgb(248,180,0);"><%= item.title %></h1>
+                                                <p class="text-start float-start visible" style="width: 100%;height: auto;font-family: Heebo, sans-serif;margin-bottom: 16px;color: rgb(133,135,150);"><%= item.description %>&nbsp;<br></p>
                                             </div>
                                         </div>
+                                        <% } %>
+                                        <% } %>
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +149,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="scripts/regex.js"></script>
+    <script src="scripts/home/userHome.js"></script>
+    <script>$(document).ready(() => { submit(); });</script>
 
     <% if (confirm != '') { %><script>$(document).ready(() => { toastr.success("<%= confirm %>"); });</script><% } %>
     <% if (error != '') { %><script>$(document).ready(() => { toastr.error("<%= error %>"); });</script><% } %>
