@@ -26,7 +26,7 @@ module.exports = async function (context, req) {
         const item = new Catalog({
             title: title,
             description: description,
-            price: parseFloat(price),
+            price: parseFloat(price).toFixed(2),
             image: image,
             file: file,
             emailVendor: emailVendor,
