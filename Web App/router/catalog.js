@@ -16,6 +16,9 @@ const blobServiceClient = BlobServiceClient.fromConnectionString(
     process.env.STORAGE_STRING_CONNECTION);
 
 const COMMENT_REGEX = /[a-zA-Z0-9@=\-'"]{3,256}/;
+const TITLE_REGEX = /[a-zA-Z0-9@=\-'"]{3,50}/
+const PRICE_REGEX = /(0|([1-9][0-9]*))(\.[0-9]+)?/
+const DESCRIPTION_REGEX = /[a-zA-Z0-9@=\-'"]{3,512}/
 
 export function getCatalog(req, res) {
     
@@ -193,6 +196,12 @@ export async function postItem(req, res) {
     
     const { title, price, description } = req.body;
 
+    if (!TITLE_REGEX.test(title) || !DESCRIPTION_REGEX.test(description) ||
+            price.match(PRICE_REGEX)[0] != price) {
+        res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
+        return;
+    }
+
     // Check on image
     const image = req.files.image[0];
     const IMAGES_MIME_TYPES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
@@ -251,13 +260,11 @@ export async function postItem(req, res) {
         }
         // Post item successful
         else {
-            fs.rmdir(`${__dirname}/../uploads`, { recursive: true }, (err) => { });
             res.redirect('../../?confirm=L\'appunto%20è%20stato%20caricato!%20Un%20moderatore%20revisionerà%20l\'appunto%20il%20prima%20possibile.');
             return;
         }
 
     } catch (error) {
-        console.log(error);
         res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
         return;
     }
@@ -299,10 +306,7 @@ export function getDownload(req, res) {
                     res.setHeader('Content-Length', stat.size);
                     res.setHeader('Content-Type', 'application/pdf');
                     res.setHeader('Content-Disposition', `attachment; filename=${title}.pdf`);
-                    file.pipe(res)
-                    .on('finish', () => {
-                        fs.rmdir(`${__dirname}/../uploads`, { recursive: true }, (err) => { });
-                    });
+                    file.pipe(res);
                 });
             });
                     
