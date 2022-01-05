@@ -64,8 +64,12 @@ export async function getAddToCart(req, res) {
             return;
         }
         // Check if item is owned by user
+        let isVendor = false;
+        if (response.data.emailVendor == req.session.user.email) {
+            isVendor = true;
+        }
         if (req.session.user.itemsBuyed.includes(_id) ||
-                req.session.user.itemsSelling.includes(_id)) {
+                isVendor) {
             res.status(404).json({ error: true });
             return;
         }   

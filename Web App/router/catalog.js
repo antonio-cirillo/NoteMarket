@@ -98,6 +98,13 @@ export async function getItem(req, res) {
     let object = {};
     // Get id of item
     const _id = req.params._id;
+
+    // Check if user logged is moderator
+    if (req.session.user && req.session.user.moderator) {
+        object.isModerator = true;
+    } else {
+        object.isModerator = false;
+    }
     
     // Call serverless for get item
     try {
@@ -120,14 +127,17 @@ export async function getItem(req, res) {
 
     // Init isOwned parameter
     object.isOwned = false;
+    object.isVendor = false;
 
     // If user is logged 
     if (req.session.user) {
         object.logged = true;
-        if (req.session.user.itemsBuyed.includes(_id) ||
-                req.session.user.itemsSelling.includes(_id)) {
-                    object.isOwned = true;
-                }
+        if (object.item.emailVendor == req.session.user.email) {
+            object.isVendor = true;
+        }
+        if (req.session.user.itemsBuyed.includes(_id) || object.isVendor) {
+            object.isOwned = true;
+        }
         if (req.session.cart.includes(_id)) {
             object.insideCart = true;
         } else {
@@ -231,6 +241,8 @@ export async function postItem(req, res) {
     // Call serverless for upload item
     try {
 
+        const NAME_CONTAINER = process.env.STORAGE_CONTAINER;
+
         // Get a reference to a container
         const containerClient = blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER);
         await containerClient.createIfNotExists();
@@ -281,15 +293,21 @@ export function getDownload(req, res) {
         axios.post(process.env.URL_FUNCTION_GET_ITEM, { _id: _id })
         .then((response) => {
             // Check if there is an error
-            if (response.data.error || response.data.status == "notVerified") {
+            if (response.data.error) {
                 res.redirect('../catalogo?error=notFound');
                 return;
             }
 
             // Check if user have permission for download item
-            if (!req.session.user.itemsBuyed.includes(_id) && !req.session.user.itemsSelling.includes(_id)) {
-                    res.status(404).json({ error: true });
-                    return;
+            let isVendor = false;
+            if (response.data.emailVendor == req.session.user.email) {
+                isVendor = true;
+            }
+            if (!req.session.user.moderator) {
+                if (!req.session.user.itemsBuyed.includes(_id) && !isVendor) {
+                        res.status(404).json({ error: true });
+                        return;
+                }
             }
 
             // Download from storage account and send it
@@ -317,6 +335,34 @@ export function getDownload(req, res) {
 
     } catch (error) {
         res.status(404).json({ error: true });
+        return;
+    }
+  
+}
+
+export async function getReview(req, res) {
+ 
+    // Get id of item
+    const _id = req.params._id;
+
+    try {
+
+        const response = await axios.post(process.env.URL_FUNCTION_REVIEW_ITEM, { 
+            _id: _id,
+            flag: (req.query.action == 'approva') ? true : false
+        });
+        
+        // Check if there is an error
+        if (response.data.error) {
+            res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
+            return;
+        }
+
+        res.redirect(`../../?confirm=L'%20appunto%20è%20stato%20${(req.query.action == 'approva') ? 'approvato ': 'respinto'}.`);
+        return;
+
+    } catch (error) {
+        res.redirect('../../?error=Ops!%20Qualcosa%20è%20andato%20storto.');
         return;
     }
   
