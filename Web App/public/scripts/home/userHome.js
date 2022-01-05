@@ -41,7 +41,7 @@ function submit() {
         }
 
         if (flag) {
-
+            $("#postItem").unbind('submit').submit();
         } else {
             toastr.error("Errore nella compilazione di uno/o più campi.");
         }
