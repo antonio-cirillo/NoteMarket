@@ -6,13 +6,15 @@ import { getIndex } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
-import { getCatalog, getDownload, getItem, postComment, postItem } from './catalog.js';
+import { getCatalog, getDownload, getItem, postComment, postItem, getReview } from './catalog.js';
 import { getCart, getAddToCart, getRemoveToCart } from './cart.js';
 import { getSuccess, getCancel, postCheckout } from './checkout.js';
 
 // Import interceptors
 import isUserLogged from '../interceptors/isUserLogged.js';
 import isNotUserLogged from '../interceptors/isNotUserLogged.js';
+import isModeratorLogged from '../interceptors/isModeratorLogged.js';
+import isNotModeratorLogged from '../interceptors/isNotModeratorLogged.js';
 
 // Create Router
 const router = express.Router();
@@ -41,30 +43,32 @@ router.post('/registrati', isUserLogged, postRegistration);
 router.get('/catalogo', getCatalog);
 
 //===================== ADD ITEM PAGE ====================//
-router.post('/catalogo/aggiungi-appunto', isNotUserLogged, uploadFile, postItem);
+router.post('/catalogo/aggiungi-appunto', isNotUserLogged, isModeratorLogged, uploadFile, postItem);
 
 //=================== ADD TO CART PAGE ===================//
-router.post('/catalogo/aggiungi-al-carrello', isNotUserLogged, getAddToCart);
+router.post('/catalogo/aggiungi-al-carrello', isNotUserLogged, isModeratorLogged, getAddToCart);
 
 //================== REMOVE TO CART PAGE =================//
-router.post('/catalogo/rimuovi-dal-carrello', isNotUserLogged, getRemoveToCart);
+router.post('/catalogo/rimuovi-dal-carrello', isNotUserLogged, isModeratorLogged, getRemoveToCart);
 
 //======================= ITEM PAGE =======================//
 router.get('/catalogo/:_id', getItem);
 
-router.post('/catalogo/:_id/scrivi-commento', isNotUserLogged, postComment);
+router.get('/catalogo/:_id/revisiona-appunto', isNotUserLogged, isNotModeratorLogged, getReview);
+
+router.post('/catalogo/:_id/scrivi-commento', isNotUserLogged, isModeratorLogged, postComment);
 
 router.get('/catalogo/:_id/scarica-appunto', isNotUserLogged, getDownload);
 
 //======================= CART PAGE =======================//
-router.get('/carrello', isNotUserLogged, getCart);
+router.get('/carrello', isNotUserLogged, isModeratorLogged, getCart);
 
 //===================== CHECKOUT PAGE =====================//
-router.post('/catalogo/checkout', isNotUserLogged, postCheckout);
+router.post('/catalogo/checkout', isNotUserLogged, isModeratorLogged, postCheckout);
 
-router.get('/catalogo/checkout/success', isNotUserLogged, getSuccess);
+router.get('/catalogo/checkout/success', isNotUserLogged, isModeratorLogged, getSuccess);
 
-router.get('/catalogo/checkout/cancel', isNotUserLogged, getCancel);
+router.get('/catalogo/checkout/cancel', isNotUserLogged, isModeratorLogged, getCancel);
 
 // Export router
 export default router;
