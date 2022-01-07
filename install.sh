@@ -3,12 +3,12 @@ resourceGroupName="NoteMarket"
 # Region
 region="westeurope"
 # Database
-databaseName="notemarket-db"
+databaseName="notemarket-db$RANDOM"
 # Cognitive Service
-cognitiveServiceName="notemarket-cs"
+cognitiveServiceName="notemarket-cs$RANDOM"
 # Storage Account
-storageAccountName="notemarket"
-storageContainerName="container"
+storageAccountName="notemarket$RANDOM"
+storageContainerName="container$RANDOM"
 # Function App
 planFunctionName="functionplan$RANDOM"
 storageFunctionName="functionstorage$RANDOM"
@@ -128,61 +128,61 @@ buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name checkout)
-checkoutKey=$(echo $buffer | jq '.default')
+checkoutKey=$(echo $buffer | jq -r '.default')
 # getCatalog
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name getCatalog)
-getCatalogKey=$(echo $buffer | jq '.default')
+getCatalogKey=$(echo $buffer | jq -r '.default')
 # getItem
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name getItem)
-getItemKey=$(echo $buffer | jq '.default')
+getItemKey=$(echo $buffer | jq -r '.default')
 # getItemsToApprove
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name getItemsToApprove)
-getItemsToApproveKey=$(echo $buffer | jq '.default')
+getItemsToApproveKey=$(echo $buffer | jq -r '.default')
 # initDatabase
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name initDatabase)
-initDatabaseKey=$(echo $buffer | jq '.default')
+initDatabaseKey=$(echo $buffer | jq -r '.default')
 # login
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name login)
-loginKey=$(echo $buffer | jq '.default')
+loginKey=$(echo $buffer | jq -r '.default')
 # postComment
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name postComment)
-postCommentKey=$(echo $buffer | jq '.default')
+postCommentKey=$(echo $buffer | jq -r '.default')
 # registration
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name registration)
-registrationKey=$(echo $buffer | jq '.default')
+registrationKey=$(echo $buffer | jq -r '.default')
 # reviewItem
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name reviewItem)
-reviewItemKey=$(echo $buffer | jq '.default')
+reviewItemKey=$(echo $buffer | jq -r '.default')
 # uploadItem
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
 	-n $functionAppName \
 	--function-name uploadItem)
-uploadItemKey=$(echo $buffer | jq '.default')
+uploadItemKey=$(echo $buffer | jq -r '.default')
 echo "Key of all functions obtained!"
 
 echo "Creating Storage Account..."
@@ -193,10 +193,12 @@ az storage account create \
     --sku Standard_LRS
 echo "Storage account created!" 
 
+echo "Getting Storage Account connection string..."
 buffer=$(az storage account show-connection-string \
 	-g $resourceGroupName \
 	-n $storageAccountName)
 storageAccountConnectionString=$(echo $buffer | jq ".connectionString")
+echo "Storage Account connection string obtained!"
 
 echo "Creating storage container..."
 az storage container create \
@@ -205,13 +207,36 @@ az storage container create \
 	--public-access blob
 echo "Storage container created!"
 
-end=$(date +%Y-%m-%dT%H:%MZ -d "$DATE + $1 day")
-echo "Generating storage account sas..."
-storageAccountSaas=$(az storage account generate-sas \
-	--services b \
-	--permissions acdlrw \
-	--resource-types sco \
-	--expiry $end \
-	--connection-string $storageAccountConnectionString)
-echo "Storage account saas generated!"
+echo "Please, insert Stripe public key:"
+read stripePublicKey
+echo "Please, insert Stripe private key:"
+read stripePrivateKey
 
+echo "Generating /Web App/.env file"
+buffer=$(rm 'Web App'/.env)
+printf "# Config\n" >> 'Web App/.env'
+printf "YOUR_DOMAIN=http://localhost\n" >> 'Web App/.env'
+printf "PORT=80" >> 'Web App/.env'
+printf "\n" >> 'Web App/.env'
+printf "# Config Azure function\n" >> 'Web App/.env'
+printf "URL_FUNCTION_CHECKOUT=https://$functionAppName.azurewebsites.net/api/checkout?code=%s\n" $checkoutKey >> 'Web App/.env'
+printf "URL_FUNCTION_GET_CATALOG=https://$functionAppName.azurewebsites.net/api/getCatalog?code=%s\n" $getCatalogKey >> 'Web App/.env'
+printf "URL_FUNCTION_GET_ITEM=https://$functionAppName.azurewebsites.net/api/getItem?code=%s\n" $getItemKey >> 'Web App/.env'
+printf "URL_FUNCTION_GET_ITEMS_TO_APPROVE=https://$functionAppName.azurewebsites.net/api/getItemsToApprove?code=%s\n" $getItemsToApproveKey >> 'Web App/.env'
+printf "URL_FUNCTION_LOGIN=https://$functionAppName.azurewebsites.net/api/login?code=%s\n" $loginKey >>'Web App/.env'
+printf "URL_FUNCTION_POST_COMMENT=https://$functionAppName.azurewebsites.net/api/postComment?code=%s\n" $postCommentKey >> 'Web App/.env'
+printf "URL_FUNCTION_REGISTRATION=https://$functionAppName.azurewebsites.net/api/registration?code=%s\n" $registrationKey >> 'Web App/.env'
+printf "URL_FUNCTION_REVIEW_ITEM=https://$functionAppName.azurewebsites.net/api/reviewItem?code=%s\n" $reviewItemKey >> 'Web App/.env'
+printf "URL_FUNCTION_UPLOAD_ITEM=https://$functionAppName.azurewebsites.net/api/uploadItem?code=%s\n" $uploadItemKey >> 'Web App/.env'
+printf "\n" >> 'Web App/.env'
+printf "# Config Storage Account\n" >> 'Web App/.env'
+printf "STORAGE_STRING_CONNECTION=%s\n" $storageAccountConnectionString >> 'Web App/.env'
+printf "STORAGE_CONTAINER=%s\n" $storageContainerName >> 'Web App/.env'
+printf "\n" >> 'Web App/.env'
+printf "# Config Stripe\n" >> 'Web App/.env'
+printf "STRIPE_PUBLIC_KEY=%s\n" $stripePublicKey >> 'Web App/.env'
+printf "STRIPE_PRIVATE_KEY=%s\n" $stripePrivateKey >> 'Web App/.env'
+echo "/Web App/.env file generated!"
+
+echo "Populating database..."
+curl https://${functionAppName}.azurewebsites.net/api/initDatabase?code=${initDatabaseKey}"
