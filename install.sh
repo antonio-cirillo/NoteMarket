@@ -237,6 +237,3 @@ printf "# Config Stripe\n" >> 'Web App/.env'
 printf "STRIPE_PUBLIC_KEY=%s\n" $stripePublicKey >> 'Web App/.env'
 printf "STRIPE_PRIVATE_KEY=%s\n" $stripePrivateKey >> 'Web App/.env'
 echo "/Web App/.env file generated!"
-
-echo "Populating database..."
-curl https://${functionAppName}.azurewebsites.net/api/initDatabase?code=${initDatabaseKey}"
