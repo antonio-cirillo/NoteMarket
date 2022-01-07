@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     dob: { type: Date, required: true },
     itemsBuyed: [{ type: String }],
     moderator: { type: Boolean, default: false },
-    itemsAssigned: { type: Number, default: 0 }
+    itemsAssigned: { type: Number, default: 0, index: 1 }
 }, {
     versionKey: false
 });
