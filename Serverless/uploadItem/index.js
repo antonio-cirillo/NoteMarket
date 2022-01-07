@@ -21,7 +21,7 @@ module.exports = async function (context, req) {
         // Find moderator
         const moderator = await Users.find({ moderator: true })
             .sort({ itemsAssigned: 1 }).limit(1).exec();
-
+            
         // Insert catalog
         const item = await new Catalog({
             title: title,
@@ -52,19 +52,18 @@ module.exports = async function (context, req) {
             }
         }).save();
 
-            // Update counter itemsAssigned for moderator
-            moderator[0].itemsAssigned +=1;
-            const update = await Users.replaceOne({ email: moderator[0].email }, moderator[0]);
+        // Update counter itemsAssigned for moderator
+        moderator[0].itemsAssigned +=1;
+        const update = await Users.replaceOne({ email: moderator[0].email }, moderator[0]);
 
-            // Check update
-            if (update.acknowledged) {
-                context.res = { body: item._id };
-                return;
-            } else {
-                context.res = { body: { error: true } };
-                return;
-            }
-
+        // Check update
+        if (update.acknowledged) {
+            context.res = { body: item._id };
+            return;
+        } else {
+            context.res = { body: { error: true } };
+            return;
+        }
 
     } catch (error) {
         console.log(error);
