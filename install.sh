@@ -14,9 +14,9 @@ planFunctionName="functionplan$RANDOM"
 storageFunctionName="functionstorage$RANDOM"
 functionAppName="functionapp$RANDOM"
 
-echo "Creating resource group..."
+echo "Creating Resource Group..."
 az group create -l $region -n $resourceGroupName
-echo "NoteMarket resouce group created!"
+echo "Resouce Group created!"
 
 echo "Creating CosmosDB database..."
 az cosmosdb create \
@@ -38,7 +38,7 @@ buffer=$(az cosmosdb keys list \
 databaseEndpoint=$(echo $buffer | jq '.connectionStrings[0].connectionString')
 echo "MongoDB endpoint obtained!"
 
-echo "Creating cognitive service..."
+echo "Creating Cognitive Service..."
 az cognitiveservices account create \
     --name $cognitiveServiceName \
     --resource-group $resourceGroupName \
@@ -46,7 +46,7 @@ az cognitiveservices account create \
     --sku F0 \
     --location westus2 \
     --yes
-echo "Cognitive service created!"
+echo "Cognitive Service created!"
 
 echo "Getting Cognitive Service endpoint..."
 buffer=$(az cognitiveservices account show \
@@ -122,7 +122,7 @@ az functionapp deployment source config-zip \
 	--src ./Serverless/serverless.zip
 echo "Function App created!"
 
-echo "Getting key of all Azure Functions..."
+echo "Getting key of all Azure functions..."
 # checkout
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
@@ -183,7 +183,7 @@ buffer=$(az functionapp function keys list \
 	-n $functionAppName \
 	--function-name uploadItem)
 uploadItemKey=$(echo $buffer | jq -r '.default')
-echo "Key of all functions obtained!"
+echo "Key of all Azure functions obtained!"
 
 echo "Creating Storage Account..."
 az storage account create \
@@ -191,7 +191,7 @@ az storage account create \
     -g $resourceGroupName \
     -l $region \
     --sku Standard_LRS
-echo "Storage account created!" 
+echo "Storage Account created!" 
 
 echo "Getting Storage Account connection string..."
 buffer=$(az storage account show-connection-string \
@@ -200,12 +200,12 @@ buffer=$(az storage account show-connection-string \
 storageAccountConnectionString=$(echo $buffer | jq ".connectionString")
 echo "Storage Account connection string obtained!"
 
-echo "Creating storage container..."
+echo "Creating Storage Container..."
 az storage container create \
 	-n $storageContainerName \
 	--connection-string $storageAccountConnectionString \
 	--public-access blob
-echo "Storage container created!"
+echo "Storage Container created!"
 
 echo "Please, insert Stripe public key:"
 read stripePublicKey
