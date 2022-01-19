@@ -25,7 +25,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-
 const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
 
 class LoginDialog extends ComponentDialog {
-    constructor(userState) {
+    constructor(id, userState) {
         super(LOGIN_DIALOG);
 
         this.userProfile = userState.createProperty(USER_PROFILE);
@@ -154,3 +154,4 @@ class LoginDialog extends ComponentDialog {
 }
 
 module.exports.LoginDialog = LoginDialog;
+module.exports.LOGIN_DIALOG = LOGIN_DIALOG;

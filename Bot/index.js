@@ -21,6 +21,7 @@ const {
 
 // Import our custom bot class that provides a turn handling function.
 const { NoteMarketBot } = require('./bots/bot');
+const { MainDialog } = require('./dialogs/mainDialog');
 const { LoginDialog } = require('./dialogs/loginDialog');
 
 const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
@@ -69,7 +70,7 @@ const conversationState = new ConversationState(memoryStorage);
 const userState = new UserState(memoryStorage);
 
 // Create the main dialog.
-const dialog = new LoginDialog(userState);
+const dialog = new MainDialog(userState);
 const bot = new NoteMarketBot(conversationState, userState, dialog);
 
 // Create HTTP server.
