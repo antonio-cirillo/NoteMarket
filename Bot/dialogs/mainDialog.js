@@ -18,6 +18,7 @@ class MainDialog extends ComponentDialog {
             .addDialog(new ChoicePrompt('cardPrompt'));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.initialStep.bind(this),
+            this.invokeStep.bind(this),
             this.finalStep.bind(this)
         ]));
 
@@ -51,18 +52,16 @@ class MainDialog extends ComponentDialog {
         return await stepContext.prompt('cardPrompt', options);
     }
 
-    async finalStep(stepContext) {
+    async invokeStep(stepContext){
         switch (stepContext.result.value) {
             case 'Login':
-                await stepContext.beginDialog(LOGIN_DIALOG, this.userState);
-                break;
+                return await stepContext.beginDialog(LOGIN_DIALOG, this.userState);
             case 'Visualizza acquisti':
-                await stepContext.beginDialog(/*TODO: Inserire nome dialogo qui */'fakeName', this.userState);
-                break;
-            default:
-                break;
+                return await stepContext.beginDialog(/*TODO: Inserire nome dialogo qui */'fakeName', this.userState);
         }
+    }
 
+    async finalStep(stepContext) {
         const userInfo = stepContext.result;
         await this.userProfileAccessor.set(stepContext.context, userInfo);
         return await stepContext.endDialog();
