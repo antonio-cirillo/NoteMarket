@@ -1,108 +1,156 @@
 const { MessageFactory, InputHints } = require('botbuilder');
-const { ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
-const { CancelAndHelpDialog } = require('./cancelAndHelpDialog');
+const {
+    AttachmentPrompt,
+    ChoiceFactory,
+    ChoicePrompt,
+    ComponentDialog,
+    ConfirmPrompt,
+    DialogSet,
+    DialogTurnStatus,
+    NumberPrompt,
+    TextPrompt,
+    WaterfallDialog,
+    ThisMemoryScope
+} = require('botbuilder-dialogs');
 
-const MAIN_WATERFALL_DIALOG = 'loginWaterfallDialog';
-const TEXT_PROMPT = 'TextPrompt';
+const axios = require('axios');
+require('dotenv').config();
+
+const LOGIN_DIALOG = 'LOGIN_DIALOG';
+const TEXT_PROMPT = 'TEXT_PROMPT';
+const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
+const USER_PROFILE = 'USER_PROFILE';
+
 const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-Z0-9]{1,46}\.[a-zA-Z]{2,4}$/;
 const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
-var userDetails = null;
 
-class LoginDialog extends CancelAndHelpDialog {
-    constructor(id) {
-        super(id || 'LoginDialog');
-        // Define the main dialog and its related components.
-        this.addDialog(new TextPrompt(TEXT_PROMPT))
-            .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
-                this.emailStep.bind(this),
-                this.checkEmailStep.bind(this),
-                this.passwordStep.bind(this),
-                this.loginStep.bind(this)
-            ]));
+class LoginDialog extends ComponentDialog {
+    constructor(userState) {
+        super(LOGIN_DIALOG);
 
-        this.initialDialogId = MAIN_WATERFALL_DIALOG;
+        this.userProfile = userState.createProperty(USER_PROFILE);
+
+        this.addDialog(new TextPrompt(TEXT_PROMPT));
+        this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+            this.emailStep.bind(this),
+            this.checkEmailStep.bind(this),
+            this.passwordStep.bind(this),
+            this.checkPasswordStep.bind(this),
+            this.loginStep.bind(this),
+        ]));
+
+        this.initialDialogId = WATERFALL_DIALOG;
+
     }
 
-    //Prompt the user to enter its credentials
-    async emailStep(stepContext) {
-        console.log('[LoginDialog]: emailStep');
-        //Initialize userDetails and accountDetails objects
-        console.log('[LoginDialog]: emailStep -> Inizializzo userDetails');
-        userDetails = stepContext.options;
-        console.log('[LoginDialog]: emailStep -> Inizializzo accountDetails');
-        stepContext.values.accountDetails = {email: null, password: null};
+    async run(turnContext, accessor) {
+        const dialogSet = new DialogSet(accessor);
+        dialogSet.add(this);
 
-        //Check if the email field is empty and prompt for a valid email
-        //otherwise the dialog continues with the provided email
-        if (!stepContext.values.accountDetails.email) {
-            console.log('[LoginDialog]: emailStep -> email non presente, creo il prompt');
-            const messageText = 'Inserisci la tua email';
-            const msg = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
-            
-            return await stepContext.prompt(TEXT_PROMPT, { 
-                prompt: msg
-            });
+        const dialogContext = await dialogSet.createContext(turnContext);
+        const results = await dialogContext.continueDialog();
+        if (results.status === DialogTurnStatus.empty) {
+            await dialogContext.beginDialog(this.id);
+        }
+    }
+
+
+    async emailStep(step) {
+
+        const messageText = 'Inserisci la tua email';
+        const msg = MessageFactory.text(
+            messageText,
+            messageText,
+            InputHints.ExpectingInput);
+
+        return await step.prompt(TEXT_PROMPT, {
+            prompt: msg
+        });
+    
+    }
+
+    async checkEmailStep(step) {
+
+        const email = step.result;
+
+        if(!EMAIL_REGEX.test(email)) {
+            await step.context.sendActivity(
+                "L'email inserita non è valida. Operazione annulata!"
+            );
+            return await step.replaceDialog(LOGIN_DIALOG);
         }
 
-        return await stepContext.next(stepContext.values.accountDetails.email);
+        step.values.user = { email: email };
+        return await step.next(step);
+
     }
 
-    async checkEmailStep(stepContext){
-        console.log('[LoginDialog]: checkEmailStep');
-        //If test fails reprompt the user for a new email
-        if(!EMAIL_REGEX.test(stepContext.result)){
-            const repromptMessageText = "Mi dispiace, per eseguire il login è richiesta una email valida";
-            const repromptMessage = MessageFactory.text(repromptMessageText, repromptMessageText, InputHints.ExpectingInput);
+    async passwordStep(step) {
 
-            return await stepContext.prompt(TEXT_PROMPT, { prompt: repromptMessage });
+        const messageText = 'Inserisci la tua password';
+        const msg = MessageFactory.text(
+            messageText,
+            messageText,
+            InputHints.ExpectingInput);
+
+        return await step.prompt(TEXT_PROMPT, {
+            prompt: msg
+        });
+        
+    }
+
+    async checkPasswordStep(step) {
+
+        const password = step.result;
+
+        if(!PASSWORD_REGEX.test(password)) {
+            await step.context.sendActivity(
+                "La password inserita non è valida. Operazione annulata!"
+            );
+            return await step.replaceDialog(LOGIN_DIALOG);
         }
-        return await stepContext.next(stepContext.result);
+
+        step.values.user.password = password;
+        return await step.next(step);
+
     }
 
-    async passwordStep(stepContext) {
-        console.log('[LoginDialog]: passwordStep');
-        stepContext.values.accountDetails.email = stepContext.result;
+    async loginStep(step) {
 
-        if (!stepContext.values.accountDetails.password) {
-            const messageText = 'Inserisci la tua password';
-            const msg = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
-            return await stepContext.prompt(TEXT_PROMPT, { prompt: msg });
-        }
-        return await stepContext.next(stepContext.values.accountDetails.password);
-    }
+        try {
 
-    async checkPasswordStep(stepContext){
-        console.log('[LoginDialog]: checkPasswordStep');
-        //If test fails reprompt the user for a new password
-        if(!PASSWORD_REGEX.test(stepContext.result)){
-            const repromptMessageText = "La password inserita non rispetta il formato richiesto, riprova";
-            const repromptMessage = MessageFactory.text(repromptMessageText, repromptMessageText, InputHints.ExpectingInput);
+            const response = await axios.post(process.env.URL_FUNCTION_LOGIN, step.values.user);
 
-            return await stepContext.prompt(TEXT_PROMPT, { prompt: repromptMessage });
-        }
-        return await stepContext.next(stepContext.result);
-    }
-
-    async loginStep(stepContext) {
-        console.log('[LoginDialog]: loginStep');
-        stepContext.values.accountDetails.password = stepContext.result;
-        try{
-            const response = await axios.post(process.env.URL_FUNCTION_LOGIN, {
-                email: stepContext.values.accountDetails.email,
-                password: stepContext.values.accountDetails.password
-            })
-            if(response.data.error){
-                //TODO: error handling
-                if(response.data.error == "credentialError"){}
-                else if(response.data.error == "notVerifiedError"){}
-                else{}
+            if (response.data.error) {
+                if (response.data.error == 'credentialError') {
+                    await step.context.sendActivity(
+                        "Email e/o password errati. Operazione annulata!"
+                    );
+                    return await step.replaceDialog(LOGIN_DIALOG);
+                } else {
+                    await step.context.sendActivity(
+                        "Ops! Qualcosa è andato storto. Operazione annulata!"
+                    );
+                    return await step.replaceDialog(LOGIN_DIALOG);
+                }
             }
-        }catch(error){}
 
-        //Put response.data in userDetails object
-        userDetails = response.data
-        return await stepContext.endDialog(response.data);
+            const user = response.data;
+            await step.context.sendActivity(
+                `Login effeattuato con successo.\n` +
+                `Bentornato ${user.name} ${user.surname}, felice di rivederti!`
+            )
+            return await step.endDialog();
+
+        } catch (error) {
+            await step.context.sendActivity(
+                "Ops! Qualcosa è andato storto. Operazione annulata!"
+            );
+            return await step.replaceDialog(LOGIN_DIALOG);
+        }
+
     }
+
 }
 
 module.exports.LoginDialog = LoginDialog;
