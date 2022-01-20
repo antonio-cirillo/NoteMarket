@@ -109,7 +109,7 @@ class MainDialog extends ComponentDialog {
 
     getChoices() {
         var cardOptions;
-        if(userInfo.moderator && isUserLoggedIn){
+        if(isUserLoggedIn && userInfo.moderator){
             cardOptions = [
                 {
                     value: 'Revisione',
@@ -117,7 +117,7 @@ class MainDialog extends ComponentDialog {
                 }
             ];
         }
-        if(!userInfo.moderator && isUserLoggedIn){
+        if(isUserLoggedIn && !userInfo.moderator){
             cardOptions = [
                 {
                     value: 'Visualizza acquisti',
