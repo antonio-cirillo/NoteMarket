@@ -60,9 +60,9 @@ class PurchasesDialog extends ComponentDialog {
 
                 if (response.data.error) {
                     await step.context.sendActivity(
-                        "Ops! Qualcosa è andato storto. Operazione annulata!"
+                        "Ops! Qualcosa è andato storto. Operazione annullata!"
                     );
-                    return await step.replaceDialog(LOGIN_DIALOG);
+                    return await step.endDialog();
                 }
     
                 const item = response.data;
@@ -70,7 +70,7 @@ class PurchasesDialog extends ComponentDialog {
             }
             catch(error){
                 await step.context.sendActivity(
-                    "Ops! Qualcosa è andato storto. Operazione annulata!"
+                    "Ops! Qualcosa è andato storto. Operazione annullata!"
                 );
                 return await step.endDialog();
             }

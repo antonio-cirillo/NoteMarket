@@ -75,7 +75,7 @@ class LoginDialog extends ComponentDialog {
 
         if(!EMAIL_REGEX.test(email)) {
             await step.context.sendActivity(
-                "L'email inserita non è valida. Operazione annulata!"
+                "L'email inserita non è valida. Operazione annullata!"
             );
             return await step.replaceDialog(LOGIN_DIALOG);
         }
@@ -105,7 +105,7 @@ class LoginDialog extends ComponentDialog {
 
         if(!PASSWORD_REGEX.test(password)) {
             await step.context.sendActivity(
-                "La password inserita non è valida. Operazione annulata!"
+                "La password inserita non è valida. Operazione annullata!"
             );
             return await step.replaceDialog(LOGIN_DIALOG);
         }
@@ -124,12 +124,12 @@ class LoginDialog extends ComponentDialog {
             if (response.data.error) {
                 if (response.data.error == 'credentialError') {
                     await step.context.sendActivity(
-                        "Email e/o password errati. Operazione annulata!"
+                        "Email e/o password errati. Operazione annullata!"
                     );
                     return await step.replaceDialog(LOGIN_DIALOG);
                 } else {
                     await step.context.sendActivity(
-                        "Ops! Qualcosa è andato storto. Operazione annulata!"
+                        "Ops! Qualcosa è andato storto. Operazione annullata!"
                     );
                     return await step.replaceDialog(LOGIN_DIALOG);
                 }
@@ -144,7 +144,7 @@ class LoginDialog extends ComponentDialog {
 
         } catch (error) {
             await step.context.sendActivity(
-                "Ops! Qualcosa è andato storto. Operazione annulata!"
+                "Ops! Qualcosa è andato storto. Operazione annullata!"
             );
             return await step.replaceDialog(LOGIN_DIALOG);
         }
