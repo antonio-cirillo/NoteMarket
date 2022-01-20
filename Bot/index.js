@@ -23,6 +23,7 @@ const {
 const { NoteMarketBot } = require('./bots/bot');
 const { MainDialog } = require('./dialogs/mainDialog');
 const { LoginDialog } = require('./dialogs/loginDialog');
+const { PurchasesDialog } = require('./dialogs/purchasesDialog');
 
 const credentialsFactory = new ConfigurationServiceClientCredentialFactory({
     MicrosoftAppId: process.env.MicrosoftAppId,

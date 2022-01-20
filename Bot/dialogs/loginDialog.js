@@ -140,7 +140,7 @@ class LoginDialog extends ComponentDialog {
                 `Login effeattuato con successo.\n` +
                 `Bentornato ${user.name} ${user.surname}, felice di rivederti!`
             )
-            return await step.endDialog();
+            return await step.endDialog(response.data);
 
         } catch (error) {
             await step.context.sendActivity(
