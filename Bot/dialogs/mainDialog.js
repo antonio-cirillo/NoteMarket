@@ -6,6 +6,7 @@ const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, 
 const { LoginDialog, LOGIN_DIALOG } = require('./loginDialog');
 const { PurchasesDialog, PURCHASES_DIALOG } = require('./purchasesDialog');
 const { CommentDialog, COMMENT_DIALOG } = require('./commentDialog');
+const { ApproveItemsDialog, APPROVE_ITEMS_DIALOG } = require('./approveItemsDialog')
 
 const MAIN_DIALOG = 'MAIN_DIALOG';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
@@ -23,6 +24,7 @@ class MainDialog extends ComponentDialog {
         this.addDialog(new LoginDialog('loginDialog', userState))
             .addDialog(new PurchasesDialog('purchasesDialog', userInfo))
             .addDialog(new CommentDialog('commentDialog', userInfo))
+            .addDialog(new ApproveItemsDialog('approveItemsDialog', userInfo))
             .addDialog(new ChoicePrompt('cardPrompt'))
             .addDialog(new TextPrompt('textPrompt'))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
@@ -93,7 +95,7 @@ class MainDialog extends ComponentDialog {
                     const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
                     return await stepContext.prompt('textPrompt', { prompt: msg });
                 }
-                return await stepContext.beginDialog(/*TODO: Inserire nome dialogo qui */'fakeName', userInfo);
+                return await stepContext.beginDialog('approveItemsDialog', userInfo);
         }
     }
 
