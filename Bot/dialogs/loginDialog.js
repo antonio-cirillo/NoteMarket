@@ -77,7 +77,7 @@ class LoginDialog extends ComponentDialog {
             await step.context.sendActivity(
                 "L'email inserita non è valida. Operazione annullata!"
             );
-            return await step.replaceDialog(LOGIN_DIALOG);
+            return await step.endDialog();
         }
 
         step.values.user = { email: email };
@@ -107,7 +107,7 @@ class LoginDialog extends ComponentDialog {
             await step.context.sendActivity(
                 "La password inserita non è valida. Operazione annullata!"
             );
-            return await step.replaceDialog(LOGIN_DIALOG);
+            return await step.endDialog();
         }
 
         step.values.user.password = password;
@@ -126,12 +126,12 @@ class LoginDialog extends ComponentDialog {
                     await step.context.sendActivity(
                         "Email e/o password errati. Operazione annullata!"
                     );
-                    return await step.replaceDialog(LOGIN_DIALOG);
+                    return await step.endDialog();
                 } else {
                     await step.context.sendActivity(
                         "Ops! Qualcosa è andato storto. Operazione annullata!"
                     );
-                    return await step.replaceDialog(LOGIN_DIALOG);
+                    return await step.endDialog();
                 }
             }
 

@@ -1,11 +1,16 @@
 const { ActivityHandler } = require('botbuilder');
+const { QnAMaker } = require('botbuilder-ai');
 
 class NoteMarketBot extends ActivityHandler {
-    constructor(conversationState, userState, dialog) {
+    constructor(conversationState, userState, dialog, QnAConfig, qnaOptions) {
         super();
         if (!conversationState) throw new Error('[DialogBot]: Missing parameter. conversationState is required');
         if (!userState) throw new Error('[DialogBot]: Missing parameter. userState is required');
         if (!dialog) throw new Error('[DialogBot]: Missing parameter. dialog is required');
+        if (!QnAConfig) throw new Error('[QnaMakerBot]: Missing parameter. QnAConfig is required');
+
+        // now create a QnAMaker connector.
+        this.qnaMaker = new QnAMaker(QnAConfig, qnaOptions);
 
         this.conversationState = conversationState;
         this.userState = userState;
@@ -27,7 +32,7 @@ class NoteMarketBot extends ActivityHandler {
 		});
 
         this.onMessage(async (context, next) => {
-            console.log('Running dialog with Message Activity.');
+            console.log('Running main dialog with Message Activity.');
 
             // Run the Dialog with the new message Activity.
             await this.dialog.run(context, this.dialogState);

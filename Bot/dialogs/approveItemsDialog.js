@@ -85,7 +85,7 @@ class ApproveItemsDialog extends ComponentDialog {
 
         var message ='Prodotti da approvare (id, titolo):\n\n'
         for(var item in items){
-            message +=  item.id + ', '+ item.title +'\n\n';
+            message +=  item._id + ', '+ item.title +'\n\n';
         }
         message += 'Inserisci l\'id del prodotto da approvare.'
 
@@ -99,7 +99,7 @@ class ApproveItemsDialog extends ComponentDialog {
         var selectedItem = null;
 
         for(var item in items){
-            if(item.id == id){
+            if(item._id == id){
                 selectedItem = item;
             }
         }
@@ -115,7 +115,7 @@ class ApproveItemsDialog extends ComponentDialog {
             "Download: " + selectedItem.file
         );
         
-        req._id = selectedItem.id;
+        req._id = selectedItem._id;
 
         const options = {
             prompt: 'Cosa vuoi fare con questi appunti?',

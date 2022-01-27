@@ -72,9 +72,16 @@ const memoryStorage = new MemoryStorage();
 const conversationState = new ConversationState(memoryStorage);
 const userState = new UserState(memoryStorage);
 
+// Map knowledge base endpoint values from .env file into the required format for `QnAMaker`.
+const QnAConfig = {
+    knowledgeBaseId: process.env.QnAKnowledgebaseId,
+    endpointKey: process.env.QnAAuthKey,
+    host: process.env.QnAEndpointHostName
+ };
+
 // Create the main dialog.
-const dialog = new MainDialog(userState);
-const bot = new NoteMarketBot(conversationState, userState, dialog);
+const dialog = new MainDialog(userState, QnAConfig, {});
+const bot = new NoteMarketBot(conversationState, userState, dialog, QnAConfig, {});
 
 // Create HTTP server.
 const server = restify.createServer();

@@ -21,7 +21,7 @@ const TEXT_PROMPT = 'TEXT_PROMPT';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
 var userInfo;
 var purchases = [];
-var req = {email: null, id : null, comment : null};
+var req = {email: null, _id : null, comment : null};
 
 class CommentDialog extends ComponentDialog {
     constructor(id, userInfo) {
@@ -87,7 +87,7 @@ class CommentDialog extends ComponentDialog {
 
         var message ='Lista degli acquisti (id, titolo):\n\n'
         for(var item in purchases){
-            message +=  item.id + ', '+ item.title +'\n\n';
+            message +=  item._id + ', '+ item.title +'\n\n';
         }
         message += 'Inserisci l\'id del prodotto da recensire.'
 
@@ -113,7 +113,7 @@ class CommentDialog extends ComponentDialog {
             return await step.endDialog();
         }
 
-        comment.id = id;
+        req._id = id;
         var message = 'Inserisci la tua recensione';
 
         return await step.prompt(TEXT_PROMPT, {

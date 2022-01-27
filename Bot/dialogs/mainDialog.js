@@ -16,10 +16,13 @@ var isUserLoggedIn = false;
 var userInfo;
 
 class MainDialog extends ComponentDialog {
-    constructor(userState) {
+    constructor(userState, QnAConfig, qnaOptions) {
         super(MAIN_DIALOG);
         this.userState = userState;
         this.userProfileAccessor = userState.createProperty(USER_PROFILE_PROPERTY);
+
+        // now create a QnAMaker connector.
+        this.qnaMaker = new QnAMaker(QnAConfig, qnaOptions);
 
         this.addDialog(new LoginDialog('loginDialog', userState))
             .addDialog(new PurchasesDialog('purchasesDialog', userInfo))
@@ -96,6 +99,20 @@ class MainDialog extends ComponentDialog {
                     return await stepContext.prompt('textPrompt', { prompt: msg });
                 }
                 return await stepContext.beginDialog('approveItemsDialog', userInfo);
+            default:
+                //Only if the input isn't recognized
+                // send user input to QnA Maker.
+                const qnaResults = await this.qnaMaker.getAnswers(context);
+
+                // If an answer was received from QnA Maker, send the answer back to the user.
+                if (qnaResults[0]) {
+                    await context.sendActivity('' + qnaResults[0].answer);
+                }
+                else {
+                    // If no answers were returned from QnA Maker...
+                    await context.sendActivity('Nessuna opzione valida selezionata. Operazione annullata!');
+                }
+                return await stepContext.replaceDialog(MAIN_DIALOG);
         }
     }
 

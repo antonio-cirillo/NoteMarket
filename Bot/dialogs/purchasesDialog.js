@@ -32,6 +32,7 @@ class PurchasesDialog extends ComponentDialog {
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.getPurchasesStep.bind(this),
             this.showResultsStep.bind(this),
+            this.showDownloadStep.bind(this)
         ]));
 
         this.initialDialogId = WATERFALL_DIALOG;
@@ -92,7 +93,49 @@ class PurchasesDialog extends ComponentDialog {
         }
 
         await step.context.sendActivity(message);
+
+        const options = {
+            prompt: 'Quale prodotto vuoi scaricare?',
+            retryPrompt: 'La risposta non è valida, riprova.',
+            choices: this.getChoices()
+        };
+
+        return await step.prompt('cardPrompt', options);
+    }
+
+    async showDownloadStep(step){
+        const title = step.result;
+        var selectedItem = null;
+
+        for(var item in purchases){
+            if(item.title == title){
+                selectedItem = item;
+            }
+        }
+
+        if(selectedItem == null){
+            await step.context.sendActivity(
+                "Il prodotto selezionato non corrisponde a nessun prodotto acquistato. Operazione annullata!"
+            );
+            return await step.endDialog();
+        }
+
+        await step.context.sendActivity(
+            "Scarica il file da questo link: " + selectedItem.file
+        );
+
         return await step.endDialog();
+    }
+
+    getChoices() {
+        var cardOptions = [];
+
+        for(var item in purchases){
+            var itemOption = {value: '' + item.title, synonyms: ['' + item._id]};
+            cardOptions.push(itemOption);
+        }
+
+        return cardOptions;
     }
 
 }
