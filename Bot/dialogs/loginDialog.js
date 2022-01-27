@@ -96,7 +96,6 @@ class LoginDialog extends ComponentDialog {
         return await step.prompt(TEXT_PROMPT, {
             prompt: msg
         });
-        
     }
 
     async checkPasswordStep(step) {
