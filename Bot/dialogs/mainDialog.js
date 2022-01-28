@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+const { QnAMaker } = require('botbuilder-ai');
 const { MessageFactory, InputHints } = require('botbuilder');
 const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
 const { LoginDialog, LOGIN_DIALOG } = require('./loginDialog');
