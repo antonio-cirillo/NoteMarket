@@ -1,38 +1,43 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-const { TimexProperty } = require('@microsoft/recognizers-text-data-types-timex-expression');
-const { MessageFactory, InputHints, ActivityHandler, ActionTypes, ActivityTypes, CardFactory } = require('botbuilder');
-const { LuisRecognizer } = require('botbuilder-ai');
+const { QnAMaker } = require('botbuilder-ai');
+const { MessageFactory, InputHints } = require('botbuilder');
 const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
-const { LoginDialog } = require('./loginDialog');
+const { LoginDialog, LOGIN_DIALOG } = require('./loginDialog');
+const { PurchasesDialog, PURCHASES_DIALOG } = require('./purchasesDialog');
+const { CommentDialog, COMMENT_DIALOG } = require('./commentDialog');
+const { ApproveItemsDialog, APPROVE_ITEMS_DIALOG } = require('./approveItemsDialog')
 
-const MAIN_WATERFALL_DIALOG = 'mainWaterfallDialog';
-
-var userDetails = {};
+const MAIN_DIALOG = 'MAIN_DIALOG';
+const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
+const USER_PROFILE_PROPERTY = 'USER_PROFILE_PROPERTY';
+var dialogState;
+var isUserLoggedIn = false;
+var userInfo;
 
 class MainDialog extends ComponentDialog {
-    //Constructor initialized with all dialogs and components to use
-    constructor(luisRecognizer, loginDialog) {
-        super('MainDialog');
+    constructor(userState, QnAConfig, qnaOptions) {
+        super(MAIN_DIALOG);
+        this.userState = userState;
+        this.userProfileAccessor = userState.createProperty(USER_PROFILE_PROPERTY);
 
-        if (!luisRecognizer) throw new Error('[MainDialog]: Missing parameter \'luisRecognizer\' is required');
-        this.luisRecognizer = luisRecognizer;
+        // now create a QnAMaker connector.
+        this.qnaMaker = new QnAMaker(QnAConfig, qnaOptions);
 
-        if (!loginDialog) throw new Error('[MainDialog]: Missing parameter \'loginDialog\' is required');
-
-        // Define the main dialog and its related components.
-        // This is a sample "book a flight" dialog.
-        this.addDialog(new TextPrompt('TextPrompt'))
-            .addDialog(new LoginDialog('loginDialog'))
+        this.addDialog(new LoginDialog('loginDialog', userState))
+            .addDialog(new PurchasesDialog('purchasesDialog', userInfo))
+            .addDialog(new CommentDialog('commentDialog', userInfo))
+            .addDialog(new ApproveItemsDialog('approveItemsDialog', userInfo))
             .addDialog(new ChoicePrompt('cardPrompt'))
-            .addDialog(new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
-                this.introStep.bind(this),
-                this.actStep.bind(this),
+            .addDialog(new TextPrompt('textPrompt'))
+            .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
+                this.initialStep.bind(this),
+                this.invokeStep.bind(this),
                 this.finalStep.bind(this)
             ]));
 
-        this.initialDialogId = MAIN_WATERFALL_DIALOG;
+        this.initialDialogId = WATERFALL_DIALOG;
     }
 
     /**
@@ -52,134 +57,109 @@ class MainDialog extends ComponentDialog {
         }
     }
 
-    /**
-     * First step in the waterfall dialog. Prompts the user for a command.
-     * Currently, this expects a booking request, like "book me a flight from Paris to Berlin on march 22"
-     * Note that the sample LUIS model will only recognize Paris, Berlin, New York and London as airport cities.
-     */
-    async introStep(stepContext) {
-        if (!this.luisRecognizer.isConfigured) {
-            const messageText = 'NOTA: Luis non configurato per debug';
-            await stepContext.context.sendActivity(messageText, null, InputHints.IgnoringInput);
-            return await stepContext.next();
-        }
-
-        const messageText = stepContext.options.restartMsg ? stepContext.options.restartMsg : 'Scrivi cosa vuoi fare';
-        const promptMessage = MessageFactory.text(messageText, messageText, InputHints.ExpectingInput);
-        return await stepContext.prompt('TextPrompt', { prompt: promptMessage });
+    async initialStep(stepContext) {
+        const options = {
+            prompt: 'Cosa possiamo fare per te?',
+            retryPrompt: 'La risposta non è valida, riprova.',
+            choices: this.getChoices()
+        };
+        // Prompt the user with the configured PromptOptions.
+        return await stepContext.prompt('cardPrompt', options);
     }
 
-    /**
-     * Second step in the waterfall.  This will use LUIS to attempt to extract the origin, destination and travel dates.
-     * Then, it hands off to the bookingDialog child dialog to collect any remaining details.
-     */
-    async actStep(stepContext) {
-        if (!this.luisRecognizer.isConfigured) {
-            // LUIS is not configured, we just run the BookingDialog path.
-            // Create the PromptOptions which contain the prompt and re-prompt messages.
-            // PromptOptions also contains the list of choices available to the user.
-            const options = {
-                prompt: 'Cosa possiamo fare per te?',
-                retryPrompt: 'La risposta non è valida, riprova.',
-                choices: this.getChoices()
-            };
-            // Prompt the user with the configured PromptOptions.
-            return await stepContext.prompt('cardPrompt', options);
-        }
-
-        // Call LUIS and gather any potential booking details. (Note the TurnContext has the response to the prompt)
-        const luisResult = await this.luisRecognizer.executeLuisQuery(stepContext.context);
-        switch (LuisRecognizer.topIntent(luisResult)) {
-        case 'BookFlight': {
-            // Extract the values for the composite entities from the LUIS result.
-            const fromEntities = this.luisRecognizer.getFromEntities(luisResult);
-            const toEntities = this.luisRecognizer.getToEntities(luisResult);
-
-            // Show a warning for Origin and Destination if we can't resolve them.
-            await this.showWarningForUnsupportedCities(stepContext.context, fromEntities, toEntities);
-
-            // Initialize BookingDetails with any entities we may have found in the response.
-            bookingDetails.destination = toEntities.airport;
-            bookingDetails.origin = fromEntities.airport;
-            bookingDetails.travelDate = this.luisRecognizer.getTravelDate(luisResult);
-            console.log('LUIS extracted these booking details:', JSON.stringify(bookingDetails));
-
-            // Run the BookingDialog passing in whatever details we have from the LUIS call, it will fill out the remainder.
-            return await stepContext.beginDialog('bookingDialog', bookingDetails);
-        }
-
-        case 'GetWeather': {
-            // We haven't implemented the GetWeatherDialog so we just display a TODO message.
-            const getWeatherMessageText = 'TODO: get weather flow here';
-            await stepContext.context.sendActivity(getWeatherMessageText, getWeatherMessageText, InputHints.IgnoringInput);
-            break;
-        }
-
-        default: {
-            // Catch all for unhandled intents
-            const didntUnderstandMessageText = `Sorry, I didn't get that. Please try asking in a different way (intent was ${ LuisRecognizer.topIntent(luisResult) })`;
-            await stepContext.context.sendActivity(didntUnderstandMessageText, didntUnderstandMessageText, InputHints.IgnoringInput);
-        }
-        }
-
-        return await stepContext.next();
-    }
-
-    /**
-     * Shows a warning if the requested From or To cities are recognized as entities but they are not in the Airport entity list.
-     * In some cases LUIS will recognize the From and To composite entities as a valid cities but the From and To Airport values
-     * will be empty if those entity values can't be mapped to a canonical item in the Airport.
-     */
-    async showWarningForUnsupportedCities(context, fromEntities, toEntities) {
-        const unsupportedCities = [];
-        if (fromEntities.from && !fromEntities.airport) {
-            unsupportedCities.push(fromEntities.from);
-        }
-
-        if (toEntities.to && !toEntities.airport) {
-            unsupportedCities.push(toEntities.to);
-        }
-
-        if (unsupportedCities.length) {
-            const messageText = `Sorry but the following airports are not supported: ${ unsupportedCities.join(', ') }`;
-            await context.sendActivity(messageText, messageText, InputHints.IgnoringInput);
-        }
-    }
-
-    /**
-     * This is the final step in the main waterfall dialog.
-     */
-    async finalStep(stepContext) {
-        var result = null;
+    async invokeStep(stepContext){
+        dialogState = stepContext.result.value;
         switch (stepContext.result.value) {
             case 'Login':
-                result = await stepContext.beginDialog('loginDialog', userDetails);
-                break;
+                if(!isUserLoggedIn){
+                    return await stepContext.beginDialog(LOGIN_DIALOG, this.userState);
+                }
+                else{
+                    const messageText = 'Utente già loggato';
+                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
+                    return await stepContext.prompt('textPrompt', { prompt: msg });
+                }
             case 'Visualizza acquisti':
-                result = await stepContext.beginDialog(/*TODO: Inserire nome dialogo qui */'fakeName', userDetails);
-                break;
+                if(!isUserLoggedIn){
+                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login.';
+                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
+                    return await stepContext.prompt('textPrompt', { prompt: msg });
+                }
+                return await stepContext.beginDialog('purchaseDialog', userInfo);
+            case 'Scrivi recensione':
+                if(!isUserLoggedIn){
+                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login.';
+                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
+                    return await stepContext.prompt('textPrompt', { prompt: msg });
+                }
+                return await stepContext.beginDialog('commentDialog', userInfo);
+            case 'Revisione':
+                if(!isUserLoggedIn || !userInfo.moderator){
+                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login ed essere un moderatore.';
+                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
+                    return await stepContext.prompt('textPrompt', { prompt: msg });
+                }
+                return await stepContext.beginDialog('approveItemsDialog', userInfo);
             default:
-                break;
-        }
+                //Only if the input isn't recognized
+                // send user input to QnA Maker.
+                const qnaResults = await this.qnaMaker.getAnswers(context);
 
-        // Restart the main dialog with a different message the second time around
-        return await stepContext.replaceDialog(this.initialDialogId, { restartMsg: 'Cos\'altro possiamo fare per te?' });
+                // If an answer was received from QnA Maker, send the answer back to the user.
+                if (qnaResults[0]) {
+                    await context.sendActivity('' + qnaResults[0].answer);
+                }
+                else {
+                    // If no answers were returned from QnA Maker...
+                    await context.sendActivity('Nessuna opzione valida selezionata. Operazione annullata!');
+                }
+                return await stepContext.replaceDialog(MAIN_DIALOG);
+        }
+    }
+
+    async finalStep(stepContext) {
+        //Saves the login details only if the user is not logged-in and the selected option is Login
+        if(dialogState == 'Login' && !isUserLoggedIn){
+            userInfo = stepContext.result;
+            await this.userProfileAccessor.set(stepContext.context, userInfo);
+            isUserLoggedIn = true;
+        }
+        return await stepContext.endDialog();
     }
 
     getChoices() {
-        const cardOptions = [
-            {
-                value: 'Login',
-                synonyms: ['login']
-            },
-            {
-                value: 'Visualizza acquisti',
-                synonyms: ['acquisti', 'ordini']
-            }
-        ];
-
+        var cardOptions;
+        if(isUserLoggedIn && userInfo.moderator){
+            cardOptions = [
+                {
+                    value: 'Revisione',
+                    synonyms: []
+                }
+            ];
+        }
+        if(isUserLoggedIn && !userInfo.moderator){
+            cardOptions = [
+                {
+                    value: 'Visualizza acquisti',
+                    synonyms: ['acquisti', 'ordini']
+                },
+                {
+                    value: 'Scrivi recensione',
+                    synonyms: ['recensione', 'recensioni']
+                }
+            ];
+        }
+        if(!isUserLoggedIn){
+            cardOptions = [
+                {
+                    value: 'Login',
+                    synonyms: ['login', 'accesso']
+                }
+            ];
+        }
         return cardOptions;
     }
 }
 
 module.exports.MainDialog = MainDialog;
+module.exports.MAIN_DIALOG = MAIN_DIALOG;

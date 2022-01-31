@@ -25,7 +25,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9]{1}[.!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]{0,99}@[a-zA-
 const PASSWORD_REGEX = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,16}$/;
 
 class LoginDialog extends ComponentDialog {
-    constructor(userState) {
+    constructor(id, userState) {
         super(LOGIN_DIALOG);
 
         this.userProfile = userState.createProperty(USER_PROFILE);
@@ -75,9 +75,9 @@ class LoginDialog extends ComponentDialog {
 
         if(!EMAIL_REGEX.test(email)) {
             await step.context.sendActivity(
-                "L'email inserita non è valida. Operazione annulata!"
+                "L'email inserita non è valida. Operazione annullata!"
             );
-            return await step.replaceDialog(LOGIN_DIALOG);
+            return await step.endDialog();
         }
 
         step.values.user = { email: email };
@@ -96,7 +96,6 @@ class LoginDialog extends ComponentDialog {
         return await step.prompt(TEXT_PROMPT, {
             prompt: msg
         });
-        
     }
 
     async checkPasswordStep(step) {
@@ -105,9 +104,9 @@ class LoginDialog extends ComponentDialog {
 
         if(!PASSWORD_REGEX.test(password)) {
             await step.context.sendActivity(
-                "La password inserita non è valida. Operazione annulata!"
+                "La password inserita non è valida. Operazione annullata!"
             );
-            return await step.replaceDialog(LOGIN_DIALOG);
+            return await step.endDialog();
         }
 
         step.values.user.password = password;
@@ -124,14 +123,14 @@ class LoginDialog extends ComponentDialog {
             if (response.data.error) {
                 if (response.data.error == 'credentialError') {
                     await step.context.sendActivity(
-                        "Email e/o password errati. Operazione annulata!"
+                        "Email e/o password errati. Operazione annullata!"
                     );
-                    return await step.replaceDialog(LOGIN_DIALOG);
+                    return await step.endDialog();
                 } else {
                     await step.context.sendActivity(
-                        "Ops! Qualcosa è andato storto. Operazione annulata!"
+                        "Ops! Qualcosa è andato storto. Operazione annullata!"
                     );
-                    return await step.replaceDialog(LOGIN_DIALOG);
+                    return await step.endDialog();
                 }
             }
 
@@ -140,11 +139,11 @@ class LoginDialog extends ComponentDialog {
                 `Login effeattuato con successo.\n` +
                 `Bentornato ${user.name} ${user.surname}, felice di rivederti!`
             )
-            return await step.endDialog();
+            return await step.endDialog(response.data);
 
         } catch (error) {
             await step.context.sendActivity(
-                "Ops! Qualcosa è andato storto. Operazione annulata!"
+                "Ops! Qualcosa è andato storto. Operazione annullata!"
             );
             return await step.replaceDialog(LOGIN_DIALOG);
         }
@@ -154,3 +153,4 @@ class LoginDialog extends ComponentDialog {
 }
 
 module.exports.LoginDialog = LoginDialog;
+module.exports.LOGIN_DIALOG = LOGIN_DIALOG;
