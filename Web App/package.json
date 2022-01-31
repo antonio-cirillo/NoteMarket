@@ -8,6 +8,9 @@
     "start": "node app.js",
     "test": "nodemon app.js"
   },
+  "engines": {
+    "node": "14.16.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antonio-cirillo/NoteMarket.git"
