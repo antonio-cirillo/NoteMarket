@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Import routers
-import router from './router/router.js';
+import router from './routes/router.js';
 
 // Set __dirname in ES6
 import { fileURLToPath } from 'url';
