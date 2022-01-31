@@ -25,10 +25,10 @@ class MainDialog extends ComponentDialog {
         // now create a QnAMaker connector.
         this.qnaMaker = new QnAMaker(QnAConfig, qnaOptions);
 
-        this.addDialog(new LoginDialog('loginDialog', userState))
-            .addDialog(new PurchasesDialog('purchasesDialog', userInfo))
-            .addDialog(new CommentDialog('commentDialog', userInfo))
-            .addDialog(new ApproveItemsDialog('approveItemsDialog', userInfo))
+        this.addDialog(new LoginDialog(LOGIN_DIALOG, userState))
+            .addDialog(new PurchasesDialog(PURCHASES_DIALOG, userInfo))
+            .addDialog(new CommentDialog(COMMENT_DIALOG, userInfo))
+            .addDialog(new ApproveItemsDialog(APPROVE_ITEMS_DIALOG, userInfo))
             .addDialog(new ChoicePrompt('cardPrompt'))
             .addDialog(new TextPrompt('textPrompt'))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
@@ -85,21 +85,21 @@ class MainDialog extends ComponentDialog {
                     const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
                     return await stepContext.prompt('textPrompt', { prompt: msg });
                 }
-                return await stepContext.beginDialog('purchaseDialog', userInfo);
+                return await stepContext.beginDialog(PURCHASES_DIALOG, userInfo);
             case 'Scrivi recensione':
                 if(!isUserLoggedIn){
                     const messageText = 'Per usare questa funzionalità è necessario effettuare il login.';
                     const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
                     return await stepContext.prompt('textPrompt', { prompt: msg });
                 }
-                return await stepContext.beginDialog('commentDialog', userInfo);
+                return await stepContext.beginDialog(COMMENT_DIALOG, userInfo);
             case 'Revisione':
                 if(!isUserLoggedIn || !userInfo.moderator){
                     const messageText = 'Per usare questa funzionalità è necessario effettuare il login ed essere un moderatore.';
                     const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
                     return await stepContext.prompt('textPrompt', { prompt: msg });
                 }
-                return await stepContext.beginDialog('approveItemsDialog', userInfo);
+                return await stepContext.beginDialog(APPROVE_ITEMS_DIALOG, userInfo);
             default:
                 //Only if the input isn't recognized
                 // send user input to QnA Maker.

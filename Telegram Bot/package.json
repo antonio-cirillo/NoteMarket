@@ -16,6 +16,7 @@
     "dependencies": {
         "axios": "^0.24.0",
         "botbuilder": "~4.15.0",
+        "botbuilder-ai": "^4.15.0",
         "botbuilder-dialogs": "~4.15.0",
         "dotenv": "^8.2.0",
         "path": "^0.12.7",

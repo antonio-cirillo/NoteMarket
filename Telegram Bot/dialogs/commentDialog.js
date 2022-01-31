@@ -27,8 +27,6 @@ class CommentDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(COMMENT_DIALOG);
 
-        this.userInfo = userInfo;
-
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.getPurchases.bind(this),
@@ -53,7 +51,14 @@ class CommentDialog extends ComponentDialog {
     }
 
     async getPurchases(step){
-        for(var _id in userInfo.itemsBuyed){
+        userInfo = step.options;
+
+        if(!userInfo.itemsBuyed){
+            await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
+            return await step.endDialog();    
+        }
+
+        for(var _id of userInfo.itemsBuyed){
             try{
                 const response = await axios.post(process.env.URL_FUNCTION_GET_ITEM, _id);
 
@@ -86,7 +91,7 @@ class CommentDialog extends ComponentDialog {
         }
 
         var message ='Lista degli acquisti (id, titolo):\n\n'
-        for(var item in purchases){
+        for(var item of purchases){
             message +=  item._id + ', '+ item.title +'\n\n';
         }
         message += 'Inserisci l\'id del prodotto da recensire.'
@@ -100,7 +105,7 @@ class CommentDialog extends ComponentDialog {
         const id = step.result;
         var isValidId = false;
 
-        for(var _id in userInfo.itemsBuyed){
+        for(var _id of userInfo.itemsBuyed){
             if(id == _id){
                 isValidId = true;
             }
