@@ -13,6 +13,8 @@ storageContainerName="container$RANDOM"
 planFunctionName="functionplan$RANDOM"
 storageFunctionName="functionstorage$RANDOM"
 functionAppName="functionapp$RANDOM"
+# Web App
+webAppName="NoteMarke$RANDOM"
 
 echo "Creating Resource Group..."
 az group create -l $region -n $resourceGroupName
@@ -237,3 +239,12 @@ printf "# Config Stripe\n" >> 'Web App/.env'
 printf "STRIPE_PUBLIC_KEY=%s\n" $stripePublicKey >> 'Web App/.env'
 printf "STRIPE_PRIVATE_KEY=%s\n" $stripePrivateKey >> 'Web App/.env'
 echo "/Web App/.env file generated!"
+
+cd 'Web App'
+
+az webapp up \
+	-n $webAppName \
+	--runtime 'NODE|14-lts' \
+	--sku FREE \
+	--resource-group $resourceGroupName \
+	--os-type Linux
