@@ -54,6 +54,7 @@ class ApproveItemsDialog extends ComponentDialog {
     }
 
     async getItemsToApprove(step){
+        userInfo = step.options;
         try{
             const response = await axios.post(process.env.URL_FUNCTION_GET_ITEMS_TO_APPROVE, userInfo.email);
 
@@ -76,7 +77,7 @@ class ApproveItemsDialog extends ComponentDialog {
     }
 
     async askId(step){
-        if(items.length == 0){
+        if(!items || items.length == 0){
             await step.context.sendActivity(
                 "Nessun prodotto da approvare. Operazione annullata"
             );
@@ -84,7 +85,7 @@ class ApproveItemsDialog extends ComponentDialog {
         }
 
         var message ='Prodotti da approvare (id, titolo):\n\n'
-        for(var item in items){
+        for(var item of items){
             message +=  item._id + ', '+ item.title +'\n\n';
         }
         message += 'Inserisci l\'id del prodotto da approvare.'
@@ -98,7 +99,7 @@ class ApproveItemsDialog extends ComponentDialog {
         const id = step.result;
         var selectedItem = null;
 
-        for(var item in items){
+        for(var item of items){
             if(item._id == id){
                 selectedItem = item;
             }

@@ -19,14 +19,15 @@ require('dotenv').config();
 const PURCHASES_DIALOG = 'PURCHASES_DIALOG';
 const TEXT_PROMPT = 'TEXT_PROMPT';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
-var userInfo;
+var user;
 var purchases = [];
 
 class PurchasesDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(PURCHASES_DIALOG);
 
-        this.userInfo = userInfo;
+        console.log('Stampo info utente:')
+        console.log(JSON.stringify(userInfo));
 
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
@@ -51,11 +52,17 @@ class PurchasesDialog extends ComponentDialog {
     }
 
     async getPurchasesStep(step){
+        user = step.options;
         await step.context.sendActivity(
             "Sto cercando i tuoi acquisti..."
         );
 
-        for(var _id in userInfo.itemsBuyed){
+        if(!user.itemsBuyed){
+            await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
+            return await step.endDialog();    
+        }
+
+        for(var _id of user.itemsBuyed){
             try{
                 const response = await axios.post(process.env.URL_FUNCTION_GET_ITEM, _id);
 
