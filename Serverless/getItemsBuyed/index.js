@@ -21,7 +21,8 @@ module.exports = async function (context, req) {
         const items = [];
         // Get items buyed
         for (const _id of user.itemsBuyed) {
-            items.shift(await Catalog.findById(_id).exec());
+            const item = await Catalog.findById(_id).exec();
+            items.push(item);
         }
 
         // Return items
