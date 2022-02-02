@@ -26,9 +26,6 @@ class PurchasesDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(PURCHASES_DIALOG);
 
-        console.log('Stampo info utente:')
-        console.log(JSON.stringify(userInfo));
-
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.getPurchasesStep.bind(this),

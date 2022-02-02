@@ -13,7 +13,6 @@ const MAIN_DIALOG = 'MAIN_DIALOG';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
 const USER_PROFILE_PROPERTY = 'USER_PROFILE_PROPERTY';
 var dialogState;
-var isUserLoggedIn = false;
 var userInfo;
 
 class MainDialog extends ComponentDialog {
@@ -58,6 +57,7 @@ class MainDialog extends ComponentDialog {
     }
 
     async initialStep(stepContext) {
+        //var isUserLoggedIn = this.userState
         const options = {
             prompt: 'Cosa possiamo fare per te?',
             retryPrompt: 'La risposta non è valida, riprova.',
