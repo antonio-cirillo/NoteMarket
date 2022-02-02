@@ -74,3 +74,26 @@ export async function getIndex(req, res) {
     }
 
 }
+
+export async function postUpdateTelegramToken(req, res) {
+
+    const { telegramToken } = req.body;
+
+    try {
+        const response = await axios.post(process.env.URL_FUNCTION_SET_TELEGRAM_TOKEN, { 
+            telegramToken: telegramToken,
+            email: req.session.user.email 
+        });
+
+        if (response.data.flag) {
+            res.redirect('./?confirm=Token%20aggiornato%20con%20successo!');
+        } else {
+            res.redirect('./?error=Ops!%20Qualcosa%20è%20andato%20storto.');
+        }
+
+    } catch (error) {
+        res.redirect('./?error=Ops!%20Qualcosa%20è%20andato%20storto.');
+        return;
+    }
+
+}
