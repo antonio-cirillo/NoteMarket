@@ -14,7 +14,7 @@ planFunctionName="functionplan$RANDOM"
 storageFunctionName="functionstorage$RANDOM"
 functionAppName="functionapp$RANDOM"
 # Web App
-webAppName="NoteMarke$RANDOM"
+webAppName="notemarket$RANDOM"
 
 echo "Creating Resource Group..."
 az group create -l $region -n $resourceGroupName
@@ -217,7 +217,7 @@ read stripePrivateKey
 echo "Generating /Web App/.env file"
 buffer=$(rm 'Web App'/.env)
 printf "# Config\n" >> 'Web App/.env'
-printf "YOUR_DOMAIN=http://localhost\n" >> 'Web App/.env'
+printf "YOUR_DOMAIN=https://%s.azurewebsites.net\n" $webAppName >> 'Web App/.env'
 printf "PORT=80" >> 'Web App/.env'
 printf "\n" >> 'Web App/.env'
 printf "# Config Azure function\n" >> 'Web App/.env'
@@ -248,4 +248,5 @@ az webapp up \
 	--runtime 'NODE|14-lts' \
 	--sku FREE \
 	--resource-group $resourceGroupName \
+	--location $region \
 	--os-type Linux
