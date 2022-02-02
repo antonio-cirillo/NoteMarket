@@ -5,7 +5,7 @@ require('dotenv').config();
 const { Catalog } = require('../models.js');
 // Authenticate the client with your key and endpoint
 const textAnalyticsClient = new TextAnalyticsClient(
-    process.env.LANGUAGE_ENDPOINT,  new AzureKeyCredential(process.env.LANGUAGE_KEY));
+    process.env.LANGUAGE_ENDPOINT, new AzureKeyCredential(process.env.LANGUAGE_KEY));
 
 module.exports = async function (context, req) {
 
