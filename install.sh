@@ -131,6 +131,12 @@ buffer=$(az functionapp function keys list \
 	-n $functionAppName \
 	--function-name checkout)
 checkoutKey=$(echo $buffer | jq -r '.default')
+# checkTelegramToken
+buffer=$(az functionapp function keys list \
+	-g $resourceGroupName \
+	-n $functionAppName \
+	--function-name checkTelegramToken)
+checkTelegramTokenKey=$(echo $buffer | jq -r '.default')
 # getCatalog
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
@@ -143,6 +149,12 @@ buffer=$(az functionapp function keys list \
 	-n $functionAppName \
 	--function-name getItem)
 getItemKey=$(echo $buffer | jq -r '.default')
+# getItemsBuyed
+buffer=$(az functionapp function keys list \
+	-g $resourceGroupName \
+	-n $functionAppName \
+	--function-name getItemsBuyed)
+getItemsBuyedKey=$(echo $buffer | jq -r '.default')
 # getItemsToApprove
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
@@ -179,6 +191,12 @@ buffer=$(az functionapp function keys list \
 	-n $functionAppName \
 	--function-name reviewItem)
 reviewItemKey=$(echo $buffer | jq -r '.default')
+#setTelegramToken
+buffer=$(az functionapp function keys list \
+	-g $resourceGroupName \
+	-n $functionAppName \
+	--function-name setTelegramToken)
+setTelegramTokenKey=$(echo $buffer | jq -r '.default')
 # uploadItem
 buffer=$(az functionapp function keys list \
 	-g $resourceGroupName \
@@ -218,17 +236,20 @@ echo "Generating /Web App/.env file"
 buffer=$(rm 'Web App'/.env)
 printf "# Config\n" >> 'Web App/.env'
 printf "YOUR_DOMAIN=https://%s.azurewebsites.net\n" $webAppName >> 'Web App/.env'
-printf "PORT=80" >> 'Web App/.env'
+printf "PORT=80\n" >> 'Web App/.env'
 printf "\n" >> 'Web App/.env'
 printf "# Config Azure function\n" >> 'Web App/.env'
 printf "URL_FUNCTION_CHECKOUT=https://$functionAppName.azurewebsites.net/api/checkout?code=%s\n" $checkoutKey >> 'Web App/.env'
+printf "URL_FUNCTION_CHECK_TELEGRAM_TOKEN=https://$functionAppName.azurewebsites.net/api/checkTelegramToken?code=%s\n" $checkTelegramTokenKey >> 'Web App/.env'
 printf "URL_FUNCTION_GET_CATALOG=https://$functionAppName.azurewebsites.net/api/getCatalog?code=%s\n" $getCatalogKey >> 'Web App/.env'
 printf "URL_FUNCTION_GET_ITEM=https://$functionAppName.azurewebsites.net/api/getItem?code=%s\n" $getItemKey >> 'Web App/.env'
+printf "URL_FUNCTION_GET_ITEMS_BUYED=https://$functionAppName.azurewebsites.net/api/getItemsBuyed?code=%s\n" $getItemsBuyedKey >> 'Web App/.env'
 printf "URL_FUNCTION_GET_ITEMS_TO_APPROVE=https://$functionAppName.azurewebsites.net/api/getItemsToApprove?code=%s\n" $getItemsToApproveKey >> 'Web App/.env'
 printf "URL_FUNCTION_LOGIN=https://$functionAppName.azurewebsites.net/api/login?code=%s\n" $loginKey >>'Web App/.env'
 printf "URL_FUNCTION_POST_COMMENT=https://$functionAppName.azurewebsites.net/api/postComment?code=%s\n" $postCommentKey >> 'Web App/.env'
 printf "URL_FUNCTION_REGISTRATION=https://$functionAppName.azurewebsites.net/api/registration?code=%s\n" $registrationKey >> 'Web App/.env'
 printf "URL_FUNCTION_REVIEW_ITEM=https://$functionAppName.azurewebsites.net/api/reviewItem?code=%s\n" $reviewItemKey >> 'Web App/.env'
+printf "URL_FUNCTION_SET_TELEGRAM_TOKEN=https://$functionAppName.azurewebsites.net/api/setTelegramToken?code=%s\n" $setTelegramToken >> 'Web App/.env'
 printf "URL_FUNCTION_UPLOAD_ITEM=https://$functionAppName.azurewebsites.net/api/uploadItem?code=%s\n" $uploadItemKey >> 'Web App/.env'
 printf "\n" >> 'Web App/.env'
 printf "# Config Storage Account\n" >> 'Web App/.env'
