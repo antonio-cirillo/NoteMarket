@@ -24,7 +24,7 @@ module.exports = async function (context, req) {
             return;
         } else {
             // Successful retrive code
-            context.res = { body: user.email };
+            context.res = { body: user };
             return;
         }
 
