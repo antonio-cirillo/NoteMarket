@@ -12,4 +12,4 @@ const PRICE_REGEX = /(0|([1-9][0-9]*))(\.[0-9]+)?/
 
 const DESCRIPTION_REGEX = /[a-zA-Z0-9@=\-'"]{3,512}/
 
-const TOKEN_REGEX = /[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/;
+const TOKEN_REGEX = /[0-9]{8,}/;
