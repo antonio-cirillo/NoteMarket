@@ -1,5 +1,5 @@
 # Resourse Group
-resourceGroupName="NoteMarket"
+resourceGroupName="NoteMarket$RANDOM"
 # Region
 region="westeurope"
 # Database
@@ -46,7 +46,7 @@ az cognitiveservices account create \
     --resource-group $resourceGroupName \
     --kind TextAnalytics \
     --sku F0 \
-    --location westus2 \
+    --location $region \
     --yes
 echo "Cognitive Service created!"
 
@@ -249,7 +249,7 @@ printf "URL_FUNCTION_LOGIN=https://$functionAppName.azurewebsites.net/api/login?
 printf "URL_FUNCTION_POST_COMMENT=https://$functionAppName.azurewebsites.net/api/postComment?code=%s\n" $postCommentKey >> 'Web App/.env'
 printf "URL_FUNCTION_REGISTRATION=https://$functionAppName.azurewebsites.net/api/registration?code=%s\n" $registrationKey >> 'Web App/.env'
 printf "URL_FUNCTION_REVIEW_ITEM=https://$functionAppName.azurewebsites.net/api/reviewItem?code=%s\n" $reviewItemKey >> 'Web App/.env'
-printf "URL_FUNCTION_SET_TELEGRAM_TOKEN=https://$functionAppName.azurewebsites.net/api/setTelegramToken?code=%s\n" $setTelegramToken >> 'Web App/.env'
+printf "URL_FUNCTION_SET_TELEGRAM_TOKEN=https://$functionAppName.azurewebsites.net/api/setTelegramToken?code=%s\n" $setTelegramTokenKey >> 'Web App/.env'
 printf "URL_FUNCTION_UPLOAD_ITEM=https://$functionAppName.azurewebsites.net/api/uploadItem?code=%s\n" $uploadItemKey >> 'Web App/.env'
 printf "\n" >> 'Web App/.env'
 printf "# Config Storage Account\n" >> 'Web App/.env'
