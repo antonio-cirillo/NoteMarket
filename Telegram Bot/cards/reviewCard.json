@@ -32,6 +32,11 @@
       "type": "Action.OpenUrl",
       "title": "Accedi a NoteMarket!",
       "url": "Here goes your URL"
+    },
+    {
+      "type": "Action.OpenUrl",
+      "title": "Accedi a NoteMarket!",
+      "url": "Here goes your URL"
     }
   ]
 }

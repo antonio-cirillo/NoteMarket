@@ -4,7 +4,6 @@
 const { QnAMaker } = require('botbuilder-ai');
 const { MessageFactory, InputHints } = require('botbuilder');
 const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, WaterfallDialog } = require('botbuilder-dialogs');
-const { LoginDialog, LOGIN_DIALOG } = require('./loginDialog');
 const { PurchasesDialog, PURCHASES_DIALOG } = require('./purchasesDialog');
 const { CommentDialog, COMMENT_DIALOG } = require('./commentDialog');
 const { ApproveItemsDialog, APPROVE_ITEMS_DIALOG } = require('./approveItemsDialog')
@@ -12,7 +11,6 @@ const { ApproveItemsDialog, APPROVE_ITEMS_DIALOG } = require('./approveItemsDial
 const MAIN_DIALOG = 'MAIN_DIALOG';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
 const USER_PROFILE_PROPERTY = 'USER_PROFILE_PROPERTY';
-var dialogState;
 var userInfo;
 
 class MainDialog extends ComponentDialog {
@@ -20,12 +18,12 @@ class MainDialog extends ComponentDialog {
         super(MAIN_DIALOG);
         this.userState = userState;
         this.userProfileAccessor = userState.createProperty(USER_PROFILE_PROPERTY);
+        this.userProfile = {initialized: false};
 
         // now create a QnAMaker connector.
         this.qnaMaker = new QnAMaker(QnAConfig, qnaOptions);
 
-        this.addDialog(new LoginDialog(LOGIN_DIALOG, userState))
-            .addDialog(new PurchasesDialog(PURCHASES_DIALOG, userInfo))
+        this.addDialog(new PurchasesDialog(PURCHASES_DIALOG, userInfo))
             .addDialog(new CommentDialog(COMMENT_DIALOG, userInfo))
             .addDialog(new ApproveItemsDialog(APPROVE_ITEMS_DIALOG, userInfo))
             .addDialog(new ChoicePrompt('cardPrompt'))
@@ -48,7 +46,7 @@ class MainDialog extends ComponentDialog {
     async run(turnContext, accessor) {
         const dialogSet = new DialogSet(accessor);
         dialogSet.add(this);
-
+        this.userProfile = await this.userProfileAccessor.get(turnContext, {});
         const dialogContext = await dialogSet.createContext(turnContext);
         const results = await dialogContext.continueDialog();
         if (results.status === DialogTurnStatus.empty) {
@@ -57,10 +55,9 @@ class MainDialog extends ComponentDialog {
     }
 
     async initialStep(stepContext) {
-        //var isUserLoggedIn = this.userState
+        
         const options = {
             prompt: 'Cosa possiamo fare per te?',
-            retryPrompt: 'La risposta non è valida, riprova.',
             choices: this.getChoices()
         };
         // Prompt the user with the configured PromptOptions.
@@ -68,38 +65,13 @@ class MainDialog extends ComponentDialog {
     }
 
     async invokeStep(stepContext){
-        dialogState = stepContext.result.value;
         switch (stepContext.result.value) {
-            case 'Login':
-                if(!isUserLoggedIn){
-                    return await stepContext.beginDialog(LOGIN_DIALOG, this.userState);
-                }
-                else{
-                    const messageText = 'Utente già loggato';
-                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
-                    return await stepContext.prompt('textPrompt', { prompt: msg });
-                }
             case 'Visualizza acquisti':
-                if(!isUserLoggedIn){
-                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login.';
-                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
-                    return await stepContext.prompt('textPrompt', { prompt: msg });
-                }
-                return await stepContext.beginDialog(PURCHASES_DIALOG, userInfo);
+                return await stepContext.beginDialog(PURCHASES_DIALOG, this.userProfile.user);
             case 'Scrivi recensione':
-                if(!isUserLoggedIn){
-                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login.';
-                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
-                    return await stepContext.prompt('textPrompt', { prompt: msg });
-                }
-                return await stepContext.beginDialog(COMMENT_DIALOG, userInfo);
+                return await stepContext.beginDialog(COMMENT_DIALOG, this.userProfile.user);
             case 'Revisione':
-                if(!isUserLoggedIn || !userInfo.moderator){
-                    const messageText = 'Per usare questa funzionalità è necessario effettuare il login ed essere un moderatore.';
-                    const msg = MessageFactory.text(messageText, messageText, InputHints.IgnoringInput);
-                    return await stepContext.prompt('textPrompt', { prompt: msg });
-                }
-                return await stepContext.beginDialog(APPROVE_ITEMS_DIALOG, userInfo);
+                return await stepContext.beginDialog(APPROVE_ITEMS_DIALOG, this.userProfile.user);
             default:
                 //Only if the input isn't recognized
                 // send user input to QnA Maker.
@@ -118,18 +90,12 @@ class MainDialog extends ComponentDialog {
     }
 
     async finalStep(stepContext) {
-        //Saves the login details only if the user is not logged-in and the selected option is Login
-        if(dialogState == 'Login' && !isUserLoggedIn){
-            userInfo = stepContext.result;
-            await this.userProfileAccessor.set(stepContext.context, userInfo);
-            isUserLoggedIn = true;
-        }
         return await stepContext.endDialog();
     }
 
     getChoices() {
         var cardOptions;
-        if(isUserLoggedIn && userInfo.moderator){
+        if(this.userProfile.isUserLoggedIn && this.userProfile.user.moderator){
             cardOptions = [
                 {
                     value: 'Revisione',
@@ -137,7 +103,7 @@ class MainDialog extends ComponentDialog {
                 }
             ];
         }
-        if(isUserLoggedIn && !userInfo.moderator){
+        if(this.userProfile.isUserLoggedIn && !this.userProfile.user.moderator){
             cardOptions = [
                 {
                     value: 'Visualizza acquisti',
@@ -146,14 +112,6 @@ class MainDialog extends ComponentDialog {
                 {
                     value: 'Scrivi recensione',
                     synonyms: ['recensione', 'recensioni']
-                }
-            ];
-        }
-        if(!isUserLoggedIn){
-            cardOptions = [
-                {
-                    value: 'Login',
-                    synonyms: ['login', 'accesso']
                 }
             ];
         }

@@ -1,4 +1,4 @@
-const { MessageFactory, InputHints } = require('botbuilder');
+const { CardFactory, MessageFactory, InputHints } = require('botbuilder');
 const {
     AttachmentPrompt,
     ChoiceFactory,
@@ -13,24 +13,24 @@ const {
     ThisMemoryScope
 } = require('botbuilder-dialogs');
 
+const WELCOME_CARD = require('../cards/welcomeCard.json');
+
 const axios = require('axios');
 require('dotenv').config();
 
 const PURCHASES_DIALOG = 'PURCHASES_DIALOG';
 const TEXT_PROMPT = 'TEXT_PROMPT';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
-var user;
-var purchases = [];
 
 class PurchasesDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(PURCHASES_DIALOG);
+        this.user = null;
+        this.purchases = [];
 
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
-            this.getPurchasesStep.bind(this),
-            this.showResultsStep.bind(this),
-            this.showDownloadStep.bind(this)
+            this.getPurchasesStep.bind(this)
         ]));
 
         this.initialDialogId = WATERFALL_DIALOG;
@@ -49,97 +49,37 @@ class PurchasesDialog extends ComponentDialog {
     }
 
     async getPurchasesStep(step){
-        user = step.options;
+        this.user = step.options;
         await step.context.sendActivity(
             "Sto cercando i tuoi acquisti..."
         );
+        
+        try{
+            const response = await axios.post(process.env.URL_FUNCTION_GET_ITEMS_BUYED, {email: this.user.email});
+            this.itemsBuyed = response.data;
 
-        if(!user.itemsBuyed){
-            await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
-            return await step.endDialog();    
+            if(this.itemsBuyed.length == 0){
+                await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
+                return await step.endDialog();    
+            }
+
+            for(var item of this.itemsBuyed){
+                WELCOME_CARD.body[0].url = item.image;
+                WELCOME_CARD.body[1].text = item.title;
+                WELCOME_CARD.body[2].text = item.description;
+                WELCOME_CARD.actions[0].url = item.file;
+                WELCOME_CARD.actions[0].title = 'Download';
+                await step.context.sendActivity({
+                    attachments: [CardFactory.adaptiveCard(WELCOME_CARD)]
+                });
+            }
         }
-
-        for(var _id of user.itemsBuyed){
-            try{
-                const response = await axios.post(process.env.URL_FUNCTION_GET_ITEM, _id);
-
-                if (response.data.error) {
-                    await step.context.sendActivity(
-                        "Ops! Qualcosa è andato storto. Operazione annullata!"
-                    );
-                    return await step.endDialog();
-                }
-    
-                const item = response.data;
-                purchases.push(item);
-            }
-            catch(error){
-                await step.context.sendActivity(
-                    "Ops! Qualcosa è andato storto. Operazione annullata!"
-                );
-                return await step.endDialog();
-            }
+        catch(error){
+            console.log(error);
+            await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
+            return await step.endDialog();
         }
         return await step.next(step);
-    }
-
-    async showResultsStep(step){
-        if(purchases.length == 0){
-            await step.context.sendActivity(
-                "Nessun acquisto da mostrare."
-            );
-            return await step.endDialog();
-        }
-
-        var message ='Acquisti:\n\n'
-        for(var item in purchases){
-            message += '\t'+ item.title +'\n\n';
-        }
-
-        await step.context.sendActivity(message);
-
-        const options = {
-            prompt: 'Quale prodotto vuoi scaricare?',
-            retryPrompt: 'La risposta non è valida, riprova.',
-            choices: this.getChoices()
-        };
-
-        return await step.prompt('cardPrompt', options);
-    }
-
-    async showDownloadStep(step){
-        const title = step.result;
-        var selectedItem = null;
-
-        for(var item in purchases){
-            if(item.title == title){
-                selectedItem = item;
-            }
-        }
-
-        if(selectedItem == null){
-            await step.context.sendActivity(
-                "Il prodotto selezionato non corrisponde a nessun prodotto acquistato. Operazione annullata!"
-            );
-            return await step.endDialog();
-        }
-
-        await step.context.sendActivity(
-            "Scarica il file da questo link: " + selectedItem.file
-        );
-
-        return await step.endDialog();
-    }
-
-    getChoices() {
-        var cardOptions = [];
-
-        for(var item in purchases){
-            var itemOption = {value: '' + item.title, synonyms: ['' + item._id]};
-            cardOptions.push(itemOption);
-        }
-
-        return cardOptions;
     }
 
 }

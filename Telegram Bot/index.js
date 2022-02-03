@@ -22,7 +22,6 @@ const {
 // Import our custom bot class that provides a turn handling function.
 const { NoteMarketBot } = require('./bots/bot');
 const { MainDialog } = require('./dialogs/mainDialog');
-const { LoginDialog } = require('./dialogs/loginDialog');
 const { PurchasesDialog } = require('./dialogs/purchasesDialog');
 const { CommentDialog } = require('./dialogs/commentDialog');
 const { ApproveItemsDialog } = require('./dialogs/approveItemsDialog');

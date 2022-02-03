@@ -19,13 +19,14 @@ require('dotenv').config();
 const COMMENT_DIALOG = 'COMMENT_DIALOG';
 const TEXT_PROMPT = 'TEXT_PROMPT';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
-var userInfo;
-var purchases = [];
-var req = {email: null, _id : null, comment : null};
 
 class CommentDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(COMMENT_DIALOG);
+
+        this.userInfo = null;
+        this.purchases = [];
+        this.req = {email: null, _id : null, comment : null};
 
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
