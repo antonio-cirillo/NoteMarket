@@ -80,6 +80,7 @@ export async function getSuccess(req, res) {
             return;
         } else {
             req.session.user.itemsBuyed = response.data.itemsBuyed;
+            req.session.save();
         }
 
     } catch (error) {
