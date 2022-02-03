@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     surname: { type: String, required: true },
     dob: { type: Date, required: true },
     itemsBuyed: [{ type: String }],
+    telegramToken: { type: String, required: false },
     moderator: { type: Boolean, default: false },
     itemsAssigned: { type: Number, default: 0, index: 1 }
 }, {

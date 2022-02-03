@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 
 // Import routers
-import { getIndex } from './index.js';
+import { getIndex, postUpdateTelegramToken } from './index.js';
 import { getLogin, postLogin } from './login.js';
 import { allLogout } from './logout.js';
 import { getRegistration, postRegistration } from './registration.js';
@@ -25,6 +25,8 @@ const uploadFile = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'item'
 
 //===================== HOME PAGE =====================//
 router.get('/', getIndex);
+
+router.post('/aggiorna-telegram-token', isNotUserLogged, postUpdateTelegramToken);
 
 //===================== LOGIN PAGE =====================//
 router.get('/login', isUserLogged, getLogin);
