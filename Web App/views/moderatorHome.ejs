@@ -43,6 +43,21 @@
             <div id="content">
                 <div class="container-fluid">
                     <h3 class="mb-4" style="font-weight: bold;color: #5c51d7;">Bentornato <%= user.name %> <%= user.surname %></h3>
+                    <div class="card shadow mb-3">
+                        <div class="card-header py-3">
+                            <p class="m-0 fw-bold" style="color: rgb(92,81,215);">Collega il tuo account telegram</p>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" id="updateTelegramToken" action="/aggiorna-telegram-token">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="mb-3"><label class="form-label" for="telegramToken" style="color: rgb(133,135,150);"><strong>Token</strong></label><input class="form-control" type="text" id="telegramToken" placeholder="Inserisci il token" name="telegramToken"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3"><button class="btn btn-sm" type="submit" style="background: #5c51d7;color: rgb(255,255,255);">Aggiorna</button></div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="card shadow mb-5">
                         <div class="card-header py-3">
                             <p class="m-0 fw-bold" style="color: rgb(92,81,215);">Appunti da revisionare</p>
