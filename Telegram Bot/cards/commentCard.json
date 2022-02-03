@@ -1,0 +1,30 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "body": [
+    {
+      "type": "Image",
+      "url": "https://i.ibb.co/pwhKdnV/logo.png",
+      "altText": "LOGO",
+      "backgroundColor": "#FFFFFF",
+      "size": "stretch"
+    },
+    {
+      "type": "TextBlock",
+      "spacing": "medium",
+      "size": "large",
+      "weight": "bolder",
+      "text": "Benvenuto in NoteMarket!",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "size": "default",
+      "weight": "bolder",
+      "isSubtle": true,
+      "text": "Per utilizzare il nostro Bot devi effettuare il pairing tra il tuo account e Telegram:\n\n - Copia il token sottostante;\n\n - Accedi al nostro sito tramite il link in basso;\n\n - Inserisci il token all'interno del tuo profilo e premi il pulsante 'Aggiorna'",
+      "wrap": true
+    }
+  ]
+}

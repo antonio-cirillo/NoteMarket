@@ -1,4 +1,4 @@
-const { MessageFactory, InputHints } = require('botbuilder');
+const { CardFactory, MessageFactory, InputHints } = require('botbuilder');
 const {
     AttachmentPrompt,
     ChoiceFactory,
@@ -15,6 +15,7 @@ const {
 
 const axios = require('axios');
 require('dotenv').config();
+const COMMENT_CARD = require('../cards/commentCard.json');
 
 const COMMENT_DIALOG = 'COMMENT_DIALOG';
 const TEXT_PROMPT = 'TEXT_PROMPT';
@@ -24,14 +25,9 @@ class CommentDialog extends ComponentDialog {
     constructor(id, userInfo) {
         super(COMMENT_DIALOG);
 
-        this.userInfo = null;
-        this.purchases = [];
-        this.req = {email: null, _id : null, comment : null};
-
         this.addDialog(new TextPrompt(TEXT_PROMPT));
         this.addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
             this.getPurchases.bind(this),
-            this.askId.bind(this),
             this.askComment.bind(this),
             this.sendComment.bind(this),
         ]));
@@ -52,74 +48,71 @@ class CommentDialog extends ComponentDialog {
     }
 
     async getPurchases(step){
-        userInfo = step.options;
+        this.req = {email: null, _id : null, comment : null};
+        this.user = step.options;
+        this.req.email = this.user.email;
+        await step.context.sendActivity(
+            "Sto cercando i tuoi acquisti..."
+        );
+        
+        try{
+            const response = await axios.post(process.env.URL_FUNCTION_GET_ITEMS_BUYED, {email: this.user.email});
+            this.itemsBuyed = response.data;
 
-        if(!userInfo.itemsBuyed){
-            await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
-            return await step.endDialog();    
-        }
-
-        for(var _id of userInfo.itemsBuyed){
-            try{
-                const response = await axios.post(process.env.URL_FUNCTION_GET_ITEM, _id);
-
-                if (response.data.error) {
-                    await step.context.sendActivity(
-                        "Ops! Qualcosa è andato storto. Operazione annullata!"
-                    );
-                    return await step.endDialog();
-                }
-    
-                const item = response.data;
-                purchases.push(item);
+            if(this.itemsBuyed.length == 0){
+                await step.context.sendActivity('Nessun acquisto da mostrare. Operazione annullata!');
+                return await step.endDialog();    
             }
-            catch(error){
+
+            this.currentItem = 0;
+            for(var item of this.itemsBuyed){
+                COMMENT_CARD.body[0].url = item.image;
+                COMMENT_CARD.body[1].text = item.title;
+                COMMENT_CARD.body[2].text = item.description;
+                await step.context.sendActivity({
+                    attachments: [CardFactory.adaptiveCard(COMMENT_CARD)]
+                });
+
+                this.currentItem += 1;
                 await step.context.sendActivity(
-                    "Ops! Qualcosa è andato storto. Operazione annullata!"
+                    'ID: ' + this.currentItem
                 );
-                return await step.endDialog();
             }
-        }
-        return await step.next(step);
-    }
+            const message = 'Inserisci l\'id del prodotto da recensire';
 
-    async askId(step){
-        if(purchases.length == 0){
+            return await step.prompt(TEXT_PROMPT, {
+                prompt: message
+            });
+        }
+        catch(error){
+            console.log(error);
             await step.context.sendActivity(
-                "Nessun acquisto da mostrare. Recensione annullata"
+                'Errore. Operazione annullata!'
             );
             return await step.endDialog();
         }
-
-        var message ='Lista degli acquisti (id, titolo):\n\n'
-        for(var item of purchases){
-            message +=  item._id + ', '+ item.title +'\n\n';
-        }
-        message += 'Inserisci l\'id del prodotto da recensire.'
-
-        return await step.prompt(TEXT_PROMPT, {
-            prompt: message
-        });
     }
 
     async askComment(step){
-        const id = step.result;
-        var isValidId = false;
+        var result = step.result;
+        var intId = parseInt(result) - 1;
+        var id = null;
 
-        for(var _id of userInfo.itemsBuyed){
-            if(id == _id){
-                isValidId = true;
+        var currItem = -1
+        for(var item of this.itemsBuyed){
+            currItem += 1;
+            if(intId == currItem){
+                this.req._id = item._id;
             }
         }
 
-        if(!isValidId){
+        if(this.req._id == null){
             await step.context.sendActivity(
-                "L'id inserito non è valido. Operazione annullata!"
+                'ID non valido. Operazione annullata!'
             );
             return await step.endDialog();
         }
 
-        req._id = id;
         var message = 'Inserisci la tua recensione';
 
         return await step.prompt(TEXT_PROMPT, {
@@ -128,11 +121,10 @@ class CommentDialog extends ComponentDialog {
     }
 
     async sendComment(step){
-        req.comment = step.result;
-        req.email = userInfo.email;
+        this.req.comment = step.result;
 
         try{
-            const response = await axios.post(process.env.URL_FUNCTION_POST_COMMENT, req);
+            const response = await axios.post(process.env.URL_FUNCTION_POST_COMMENT, this.req);
 
             if (response.data.error) {
                 await step.context.sendActivity(
@@ -148,10 +140,20 @@ class CommentDialog extends ComponentDialog {
         }
         catch(error){
             await step.context.sendActivity(
-                "Ops! Qualcosa è andato storto. Operazione annullata!"
+                "Errore. Operazione annullata!"
             );
             return await step.endDialog();
         }
+    }
+
+    getChoices() {
+        var cardOptions = [
+                {
+                    value: 'Recensisci ' + this.currentItem,
+                    synonyms: [this.currentItem]
+                }
+            ];
+        return cardOptions;
     }
 
 }

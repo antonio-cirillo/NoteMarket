@@ -7,6 +7,7 @@ const { ChoicePrompt, ComponentDialog, DialogSet, DialogTurnStatus, TextPrompt, 
 const { PurchasesDialog, PURCHASES_DIALOG } = require('./purchasesDialog');
 const { CommentDialog, COMMENT_DIALOG } = require('./commentDialog');
 const { ApproveItemsDialog, APPROVE_ITEMS_DIALOG } = require('./approveItemsDialog')
+const { QnaDialog, QNA_DIALOG } = require('./QnaDialog.js')
 
 const MAIN_DIALOG = 'MAIN_DIALOG';
 const WATERFALL_DIALOG = 'WATERFALL_DIALOG';
@@ -26,6 +27,7 @@ class MainDialog extends ComponentDialog {
         this.addDialog(new PurchasesDialog(PURCHASES_DIALOG, userInfo))
             .addDialog(new CommentDialog(COMMENT_DIALOG, userInfo))
             .addDialog(new ApproveItemsDialog(APPROVE_ITEMS_DIALOG, userInfo))
+            .addDialog(new QnaDialog(QNA_DIALOG, userInfo, this.qnaMaker))
             .addDialog(new ChoicePrompt('cardPrompt'))
             .addDialog(new TextPrompt('textPrompt'))
             .addDialog(new WaterfallDialog(WATERFALL_DIALOG, [
@@ -65,28 +67,15 @@ class MainDialog extends ComponentDialog {
     }
 
     async invokeStep(stepContext){
-        switch (stepContext.result.value) {
-            case 'Visualizza acquisti':
-                return await stepContext.beginDialog(PURCHASES_DIALOG, this.userProfile.user);
-            case 'Scrivi recensione':
-                return await stepContext.beginDialog(COMMENT_DIALOG, this.userProfile.user);
-            case 'Revisione':
-                return await stepContext.beginDialog(APPROVE_ITEMS_DIALOG, this.userProfile.user);
-            default:
-                //Only if the input isn't recognized
-                // send user input to QnA Maker.
-                const qnaResults = await this.qnaMaker.getAnswers(context);
-
-                // If an answer was received from QnA Maker, send the answer back to the user.
-                if (qnaResults[0]) {
-                    await context.sendActivity('' + qnaResults[0].answer);
-                }
-                else {
-                    // If no answers were returned from QnA Maker...
-                    await context.sendActivity('Nessuna opzione valida selezionata. Operazione annullata!');
-                }
-                return await stepContext.replaceDialog(MAIN_DIALOG);
-        }
+        var result = stepContext.result.value
+        if(result == 'Visualizza acquisti')
+            return await stepContext.beginDialog(PURCHASES_DIALOG, this.userProfile.user);
+        else if(result == 'Scrivi recensione')
+            return await stepContext.beginDialog(COMMENT_DIALOG, this.userProfile.user);
+        else if(result == 'Revisione')
+            return await stepContext.beginDialog(APPROVE_ITEMS_DIALOG, this.userProfile.user);
+        else if(result == 'Altro')
+            return await stepContext.beginDialog(QNA_DIALOG, this.qnaMaker);
     }
 
     async finalStep(stepContext) {
@@ -112,6 +101,10 @@ class MainDialog extends ComponentDialog {
                 {
                     value: 'Scrivi recensione',
                     synonyms: ['recensione', 'recensioni']
+                },
+                {
+                    value: 'Altro',
+                    synonyms: ['altro', 'other']
                 }
             ];
         }
