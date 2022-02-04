@@ -84,7 +84,7 @@ class NoteMarketBot extends ActivityHandler {
                         await next();
 
                     } else {
-                        const qnaResults = await this.QnaMaker.getAnswers(context);
+                        const qnaResults = await this.qnaMaker.getAnswers(context);
 
                         // If an answer was received from QnA Maker, send the answer back to the user.
                         if (qnaResults[0]) {
@@ -92,7 +92,6 @@ class NoteMarketBot extends ActivityHandler {
                         }
                         else {
                             // If no answers were returned from QnA Maker...
-                            await step.context.sendActivity('Domanda non valida. Si prega di seguire le istruzioni di seguito.');
                             WELCOME_CARD.actions[0].url = process.env.YOUR_DOMAIN + '/login';
                             await context.sendActivity({
                                 attachments: [CardFactory.adaptiveCard(WELCOME_CARD)]
