@@ -66,7 +66,6 @@ class QnaDialog extends ComponentDialog {
         // send user input to QnA Maker.
         const qnaResults = await this.QnaMaker.getAnswers(step.context);
 
-        console.log(qnaResults);
         // If an answer was received from QnA Maker, send the answer back to the user.
         if (qnaResults[0]) {
             await step.context.sendActivity('' + qnaResults[0].answer);

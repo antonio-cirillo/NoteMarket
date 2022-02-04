@@ -69,7 +69,6 @@ class NoteMarketBot extends ActivityHandler {
 
             if(!userProfile.isUserLoggedIn){
                 try {
-                    
                     const response = await axios.post(
                         process.env.URL_FUNCTION_CHECK_TELEGRAM_TOKEN, {
                             telegramToken: userProfile.id
@@ -85,15 +84,23 @@ class NoteMarketBot extends ActivityHandler {
                         await next();
 
                     } else {
-                        
-                        WELCOME_CARD.actions[0].url = process.env.YOUR_DOMAIN + '/login';
-                        await context.sendActivity({
-                            attachments: [CardFactory.adaptiveCard(WELCOME_CARD)]
-                        });
-                        await context.sendActivity({
-                            text: 'Copia il seguente token: ' + userProfile.id
-                        });
+                        const qnaResults = await this.QnaMaker.getAnswers(context);
 
+                        // If an answer was received from QnA Maker, send the answer back to the user.
+                        if (qnaResults[0]) {
+                            await step.context.sendActivity('' + qnaResults[0].answer);
+                        }
+                        else {
+                            // If no answers were returned from QnA Maker...
+                            await step.context.sendActivity('Domanda non valida. Si prega di seguire le istruzioni di seguito.');
+                            WELCOME_CARD.actions[0].url = process.env.YOUR_DOMAIN + '/login';
+                            await context.sendActivity({
+                                attachments: [CardFactory.adaptiveCard(WELCOME_CARD)]
+                            });
+                            await context.sendActivity({
+                                text: 'Copia il seguente token: ' + userProfile.id
+                            });
+                        }
                     }
                 } catch (error) {
 
