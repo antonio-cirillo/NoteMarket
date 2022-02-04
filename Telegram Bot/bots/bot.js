@@ -6,6 +6,7 @@ const USER_PROFILE_PROPERTY = 'USER_PROFILE_PROPERTY';
 const WELCOME_CARD = require('../cards/welcomeCard.json');
 
 const axios = require('axios');
+const { QnaDialog } = require('../dialogs/QnaDialog');
 require('dotenv').config();
 
 class NoteMarketBot extends ActivityHandler {
@@ -85,10 +86,9 @@ class NoteMarketBot extends ActivityHandler {
 
                     } else {
                         const qnaResults = await this.qnaMaker.getAnswers(context);
-
                         // If an answer was received from QnA Maker, send the answer back to the user.
                         if (qnaResults[0]) {
-                            await step.context.sendActivity('' + qnaResults[0].answer);
+                            await context.sendActivity('' + qnaResults[0].answer);
                         }
                         else {
                             // If no answers were returned from QnA Maker...
