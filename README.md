@@ -6,7 +6,7 @@ __NoteMarket__ is a project work for the Cloud Computing course, consisting in a
 # Dependencies
 To launch the installation script and correctly deploy all resources the [Azure CLI](https://docs.microsoft.com/it-it/cli/azure/install-azure-cli) must be installed.
 
-It's necessary to configure some cloud services by hand, due to the lack of support from the Azure CLI. More information can be found into the [Telegram Bot readme]().
+It's necessary to configure some cloud services by hand, due to the lack of support from the Azure CLI. More information can be found into the [Telegram Bot readme](https://github.com/antonio-cirillo/NoteMarket/blob/main/Telegram%20Bot/README.md).
 
 # Installation
 In order to simplify the installation process and grant portability, it's been created an __install bash script__.
