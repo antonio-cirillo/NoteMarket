@@ -15,7 +15,7 @@ Follow these steps:
 
 1. login the [QnA Portal](https://qnamaker.ai/) with Azure credentials;
 2. Select "Create a knowledge base";
-3. Use our .tsv file to populate the knowledge base;
+3. Use our [.tsv file](https://www.github.com/NoteMarket/Documentation/NoteMarketBotQnA.tsv) to populate the knowledge base;
 4. Select "Save and train" to generate a QnA AI model.
 6. Select "Publish" to finalize the creation of the knowledge base.
 
