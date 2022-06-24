@@ -25,7 +25,7 @@
     "@azure/storage-blob": "^12.8.0",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
+    "ejs": "^3.1.7",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "mime-types": "^2.1.34",
